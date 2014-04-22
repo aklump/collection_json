@@ -40,6 +40,11 @@ class CollectionJsonToJson implements ContentTypeTranslaterInterface {
       $output[] = $output_item;
     }
 
+
+    if (isset($source->collection->error)) {
+      $output[] = implode(' ', array($source->collection->error->code, $source->collection->error->title . ':', $source->collection->error->message));
+    }
+
     // Reduce a single set to one object
     if (count($output) === 1) {
       $output = reset($output);

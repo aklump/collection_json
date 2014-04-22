@@ -12,6 +12,19 @@ require_once dirname(__FILE__) . '/../vendor/autoload.php';
 
 class CollectionJsonToJsonTest extends \PHPUnit_Framework_TestCase {
 
+  public function testError() {
+    $subject = <<<EOD
+{"collection":{"version":"1.0","href":"http:\/\/dev.ovagraph.local\/api\/3.0\/cycles","error":{"title":"Not Acceptable","code":"406","message":"Invalid query provided, double check that the fields and parameters you defined are correct and exist."}}}    
+EOD;
+    $payload = new Payload('application/vnd.collection+json', $subject);
+    $result = CollectionJsonToJson::translate($payload);
+
+    $control = <<<EOD
+"406 Not Acceptable: Invalid query provided, double check that the fields and parameters you defined are correct and exist."
+EOD;
+    $this->assertSame($control, $result->getContent());
+  }
+
   public function testPassJsonThroughAsClonedObject() {
     $subject = '{"bf":98.6,"br":1,"bt":"05:12-08:00","cd":9,"cf":"s","cm":"w","cp":"l"}';
     $payload = new Payload('application/json', $subject);
