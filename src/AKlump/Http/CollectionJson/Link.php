@@ -1,5 +1,5 @@
 <?php
-namespace AKlump\LoftLib\Api\CollectionJson;
+namespace AKlump\Http\CollectionJson;
 
 /**
  * Represents a link
@@ -13,6 +13,28 @@ class Link extends Object {
     $this->setPrompt($prompt);
     $this->setRender($render);
   }
+
+  /**
+   * Set the render.
+   *
+   * @param string $render
+   *
+   * @return $this
+   */
+  public function setRender($render) {
+    $this->data['render'] = (string) $render;
+  
+    return $this;
+  }
+
+  /**
+   * Return the render.
+   *
+   * @return string
+   */  
+  public function getRender() {
+    return $this->data['render'];
+  }  
 
   public function asStdClass() {
     $obj = (object) array(

@@ -1,8 +1,8 @@
 <?php
-namespace AKlump\LoftLib\Api\CollectionJson;
+namespace AKlump\Http\CollectionJson;
 
 /**
- * Represents a collection json item.
+ * Represents the base class of shared methods for CollectionJson objects.
  */
 abstract class Object {
 
@@ -14,72 +14,8 @@ abstract class Object {
     'prompt' => '',
     'data' => array(),
     'rel' => '',
-    'render' => '',
     'items' => array(),
-    'queries' => array(),
   );
-
-  protected $template;
-
-  /**
-   * Set the Template object.
-   *
-   * @param Template $template
-   *
-   * @return $this
-   */
-  public function setTemplate(Template $template) {
-    $this->template = $template;
-  
-    return $this;
-  }
-  
-  /**
-   * Return the Template object.
-   *
-   * @return Template
-   */  
-  public function getTemplate() {
-    return $this->template;
-  }
-  
-  /**
-   * Set the queries array.
-   *
-   * @param array $queries
-   *
-   * @return $this
-   */  
-  public function setQueries($queries) {
-    $this->data['queries'] = array();
-    foreach($queries as $querie) {
-      $this->addQuery($querie);
-    }
-  
-    return $this;
-  }
-
-  /**
-   * Adds a single query.
-   *
-   * @param Query $query
-   *
-   * @return $this
-   */  
-  public function addQuery(Query $query) {
-    $this->data['queries'][] = $query;
-  
-    return $this;
-  }
-  
-  /**
-   * Return the queries array.
-   *
-   * @return array
-   */
-  public function getQueries() {
-    return $this->data['queries'];
-  }
 
   /**
    * Set the items array.
@@ -117,28 +53,6 @@ abstract class Object {
    */  
   public function getItems() {
     return $this->data['items'];
-  }
-
-  /**
-   * Set the render.
-   *
-   * @param string $render
-   *
-   * @return $this
-   */
-  public function setRender($render) {
-    $this->data['render'] = (string) $render;
-  
-    return $this;
-  }
-
-  /**
-   * Return the render.
-   *
-   * @return string
-   */  
-  public function getRender() {
-    return $this->data['render'];
   }
 
   /**

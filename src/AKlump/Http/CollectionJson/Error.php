@@ -1,5 +1,5 @@
 <?php
-namespace AKlump\LoftLib\Api\CollectionJson;
+namespace AKlump\Http\CollectionJson;
 
 /**
  * Represents an error.
