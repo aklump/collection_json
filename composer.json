@@ -2,7 +2,7 @@
   "name": "aklump/collection_json",
   "type": "library",
   "description": "Php objects for working with hypermedia Collection+JSON (http://amundsen.com/media-types/)",
-  "keywords": ["application/vnd.collection+json", "amundsen"],
+  "keywords": ["vnd.collection", "json", "amundsen", "hypermedia"],
   "homepage": "http://www.intheloftstudios.com/packages/php/collection_json",
   "license": "BSD-3-Clause",
   "authors": [
