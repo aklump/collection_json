@@ -9,7 +9,7 @@ use \AKlump\Http\Transfer\PayloadInterface;
  */
 class Collection extends Object implements PayloadInterface {
 
-  protected $template;
+  protected $template, $error;
 
   public function __construct($href = '') {
     $this->setHref($href);
@@ -43,6 +43,10 @@ class Collection extends Object implements PayloadInterface {
 
     if ($t = $this->getTemplate()) {
       $obj->template = $t->asStdClass()->template;
+    }
+
+    if ($e = $this->getError()) {
+      $obj->error = $e->asStdClass();
     }
 
     return (object) array('collection' => $obj);
@@ -128,6 +132,13 @@ class Collection extends Object implements PayloadInterface {
         $t = new Template();
         $t->setContent(json_encode($obj));
         $this->setTemplate($t);
+      }
+
+      if (isset($obj->error)) {
+        $code     = isset($obj->error->code) ? $obj->error->code : '';
+        $title    = isset($obj->error->title) ? $obj->error->title : '';
+        $message  = isset($obj->error->message) ? $obj->error->message : '';
+        $this->setError(new Error($code, $title, $message));
       }
     }
 
@@ -218,5 +229,27 @@ class Collection extends Object implements PayloadInterface {
    */
   public function getQueries() {
     return $this->data['queries'];
-  }  
+  }
+
+  /**
+   * Set the Error object.
+   *
+   * @param Error $error
+   *
+   * @return $this
+   */  
+  public function setError(Error $error) {
+    $this->error = $error;
+  
+    return $this;
+  }
+ 
+  /**
+   * Return the Error object.
+   *
+   * @return Error
+   */ 
+  public function getError() {
+    return $this->error;
+  }
 }

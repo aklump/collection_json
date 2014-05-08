@@ -12,6 +12,60 @@ require_once dirname(__FILE__) . '/../vendor/autoload.php';
 
 class CollectionJsonToJsonTest extends \PHPUnit_Framework_TestCase {
 
+  public function testRealWorld1() {
+    $subject = <<<EOD
+{
+    "collection": {
+        "error": {
+            "code": "404",
+            "message": "Cycle 9710018 does not exist.",
+            "title": "Not found"
+        },
+        "href": "http://dev.ovagraph.local/api/3.0/cycles/9710018",
+        "version": "1.0"
+    }
+}    
+EOD;
+    $payload = new Payload('application/vnd.collection+json');
+    $payload->setContent($subject);
+
+    $json = CollectionJsonToJson::translate($payload)->getContent(); 
+    $control = '{"error":{"code":"404","message":"Cycle 9710018 does not exist.","title":"Not found"}}';
+    $this->assertSame($control, $json);
+  }
+
+  public function testError() {
+    $subject = <<<EOD
+{
+    "collection": {
+        "error": {
+            "code": "404",
+            "message": "Cycle 9710018 does not exist.",
+            "title": "Not found"
+        },
+        "href": "http://dev.ovagraph.local/api/3.0/cycles/9710018",
+        "version": "1.0"
+    }
+}    
+EOD;
+    $payload = new Payload('application/vnd.collection+json', $subject);
+    $result = CollectionJsonToJson::translate($payload);
+    $control = '{"error":{"code":"404","message":"Cycle 9710018 does not exist.","title":"Not found"}}';
+    $this->assertSame($control, (string) $result);
+
+
+    $subject = <<<EOD
+{"collection":{"version":"1.0","href":"http:\/\/dev.ovagraph.local\/api\/3.0\/cycles","error":{"title":"Not Acceptable","code":"406","message":"Invalid query provided, double check that the fields and parameters you defined are correct and exist."}}}    
+EOD;
+    $payload = new Payload('application/vnd.collection+json', $subject);
+    $result = CollectionJsonToJson::translate($payload);
+
+    $control = <<<EOD
+{"error":{"title":"Not Acceptable","code":"406","message":"Invalid query provided, double check that the fields and parameters you defined are correct and exist."}}
+EOD;
+    $this->assertSame($control, $result->getContent());
+  }
+
   public function testPassJsonThroughAsClonedObject() {
     $subject = '{"bf":98.6,"br":1,"bt":"05:12-08:00","cd":9,"cf":"s","cm":"w","cp":"l"}';
     $payload = new Payload('application/json', $subject);
@@ -453,7 +507,7 @@ EOD;
   public function testTextHtmlGoingInShouldFail() {
     $payload = new Payload('text/html', '<div>name: aaron</div>');
     $result = CollectionJsonToJson::translate($payload);
-    $this->assertFalse($result);
+    $this->assertSame('Bad content type: text/html', $result->getContent());
   }
 
   public function testCollection() {

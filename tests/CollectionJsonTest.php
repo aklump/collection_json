@@ -10,6 +10,17 @@ require_once dirname(__FILE__) . '/../vendor/autoload.php';
 
 class CollectionJsonTest extends \PHPUnit_Framework_TestCase {
 
+  public function testCollectionError() {
+    $obj = new Collection();
+    $obj->setError(new Error(404, 'Not Found', 'Resource not found.'));
+    $control = '{"collection":{"version":"1.0","href":"","error":{"title":"Not Found","code":"404","message":"Resource not found."}}}';
+    $this->assertSame($control, (string) $obj);
+
+    $obj = new Collection();
+    $obj->setContent($control);
+    $this->assertSame($control, (string) $obj);
+  }
+
   public function testCollectionSetContent() {
     $obj = new Collection();
     $subject = <<<EOD

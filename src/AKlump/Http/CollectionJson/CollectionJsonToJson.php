@@ -15,12 +15,14 @@ class CollectionJsonToJson implements ContentTypeTranslaterInterface {
       return clone $payload;
     }
 
+    $obj = new Payload('application/json');
     if (!in_array($payload->getContentType(), array(
       'application/vnd.collection+json'
     ))) {
-      return FALSE;
+      $obj->setContent('Bad content type: ' . $payload->getContentType());
+      return $obj;
     }
-    $obj = new Payload('application/json');
+    
 
     $source = json_decode($payload->getContent());
     $items = $output = array();
@@ -38,6 +40,11 @@ class CollectionJsonToJson implements ContentTypeTranslaterInterface {
         $output_item->{$data->name} = $data->value;
       }
       $output[] = $output_item;
+    }
+
+
+    if (isset($source->collection->error)) {
+      $output[] = (object) array('error' => $source->collection->error);
     }
 
     // Reduce a single set to one object
