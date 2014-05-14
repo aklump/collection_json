@@ -12,6 +12,72 @@ require_once dirname(__FILE__) . '/../vendor/autoload.php';
 
 class CollectionJsonToJsonTest extends \PHPUnit_Framework_TestCase {
 
+  public function testOneDataPointTwoItems() {
+    $subject = <<<EOD
+{
+    "collection": {
+        "href": "http://www.ovagraph.com/api/3/users/123",
+        "items": [
+            {
+                "data": [
+                    {
+                        "name": "uid",
+                        "value": "123"
+                    }
+                ],
+                "links": [
+                    {
+                        "href": "http://www.ovagraph.com/user/123",
+                        "name": "about",
+                        "prompt": "More info",
+                        "rel": "about",
+                        "render": "link"
+                    },
+                    {
+                        "href": "http://www.ovagraph.com/sites/ovagraph.com/files/styles/bubble-avatar-90x100/public/pictures/picture-121826-1395107651.jpg?itok=-C7H2xl2",
+                        "name": "avatar",
+                        "prompt": "Avatar picture for lsmith",
+                        "rel": "icon",
+                        "render": "image"
+                    }
+                ]                
+            },
+            {
+                "data": [
+                    {
+                        "name": "uid",
+                        "value": "124"
+                    }
+                ],
+                "links": [
+                    {
+                        "href": "http://www.ovagraph.com/user/124",
+                        "name": "about",
+                        "prompt": "More info",
+                        "rel": "about",
+                        "render": "link"
+                    },
+                    {
+                        "href": "http://www.ovagraph.com/sites/ovagraph.com/files/styles/bubble-avatar-90x100/public/pictures/picture-121826-1395107651.jpg?itok=-C7H2xl2",
+                        "name": "avatar",
+                        "prompt": "Avatar picture for jsmith",
+                        "rel": "icon",
+                        "render": "image"
+                    }
+                ]  
+            }
+        ]
+    }
+}  
+EOD;
+    $payload = new Payload('application/vnd.collection+json');
+    $payload->setContent($subject);
+
+    $json = CollectionJsonToJson::translate($payload)->getContent(); 
+    $control = '{"items":[{"data":{"uid":"123"},"links":{"about":"http:\/\/www.ovagraph.com\/user\/123"},"images":{"avatar":"http:\/\/www.ovagraph.com\/sites\/ovagraph.com\/files\/styles\/bubble-avatar-90x100\/public\/pictures\/picture-121826-1395107651.jpg?itok=-C7H2xl2"}},{"data":{"uid":"124"},"links":{"about":"http:\/\/www.ovagraph.com\/user\/124"},"images":{"avatar":"http:\/\/www.ovagraph.com\/sites\/ovagraph.com\/files\/styles\/bubble-avatar-90x100\/public\/pictures\/picture-121826-1395107651.jpg?itok=-C7H2xl2"}}]}';
+    $this->assertSame($control, $json);
+  }
+
   public function testRealWorld1() {
     $subject = <<<EOD
 {
@@ -191,7 +257,7 @@ EOD;
 }    
 EOD;
     $control = <<<EOD
-{"bf":98.6,"br":1,"bt":"05:12-08:00","cd":9,"cf":"s","cm":"w","cp":"l","d":"2014-01-15","ft":1,"fu":1,"f":3,"hp":-1,"ic":"689714","id":"689730","in":1,"mn":"h","mo":0,"ms":4,"no":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at massa sed nulla consectetur malesuada. Aliquam a sapien non sem rhoncus bibendum quis eu tellus. Nunc luctus fermentum volutpat. Praesent tortor diam, sodales ornare facilisis sit amet, consequat nec elit. Aenean at porttitor purus. Phasellus tempus congue suscipit. Vivamus in magna ante, ut cursus mi. Quisque vel ante in massa pretium condimentum non id risus. Vivamus at felis eu enim egestas feugiat ut sit amet arcu. Nunc eu malesuada nunc. Nam felis lectus, convallis eu commodo eget, vehicula quis sem. Nulla egestas bibendum consequat. Pellentesque tristique lacus at leo dapibus pulvinar.","op":-1,"or":200,"ot":"05:21-08:00","rx":[1,4,10],"vr":200,"vt":"05:24-08:00"}
+{"items":[{"data":{"bf":98.6,"br":1,"bt":"05:12-08:00","cd":9,"cf":"s","cm":"w","cp":"l","d":"2014-01-15","ft":1,"fu":1,"f":3,"hp":-1,"ic":"689714","id":"689730","in":1,"mn":"h","mo":0,"ms":4,"no":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at massa sed nulla consectetur malesuada. Aliquam a sapien non sem rhoncus bibendum quis eu tellus. Nunc luctus fermentum volutpat. Praesent tortor diam, sodales ornare facilisis sit amet, consequat nec elit. Aenean at porttitor purus. Phasellus tempus congue suscipit. Vivamus in magna ante, ut cursus mi. Quisque vel ante in massa pretium condimentum non id risus. Vivamus at felis eu enim egestas feugiat ut sit amet arcu. Nunc eu malesuada nunc. Nam felis lectus, convallis eu commodo eget, vehicula quis sem. Nulla egestas bibendum consequat. Pellentesque tristique lacus at leo dapibus pulvinar.","op":-1,"or":200,"ot":"05:21-08:00","rx":[1,4,10],"vr":200,"vt":"05:24-08:00"}}]}
 EOD;
     $payload = new Payload('application/vnd.collection+json', $subject);
     $result = CollectionJsonToJson::translate($payload);
@@ -494,7 +560,7 @@ EOD;
 }    
 EOD;
     $control = <<<EOD
-{"title":"Day 9 of Cycle #13","bf":98.6,"br":1,"bt":"05:12-08:00","cd":9,"cf":"s","cm":"w","cp":"l","d":"2014-01-15","ft":1,"fu":1,"f":3,"hp":-1,"ic":"689714","id":"689730","in":1,"mn":"h","mo":0,"ms":4,"no":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at massa sed nulla consectetur malesuada. Aliquam a sapien non sem rhoncus bibendum quis eu tellus. Nunc luctus fermentum volutpat. Praesent tortor diam, sodales ornare facilisis sit amet, consequat nec elit. Aenean at porttitor purus. Phasellus tempus congue suscipit. Vivamus in magna ante, ut cursus mi. Quisque vel ante in massa pretium condimentum non id risus. Vivamus at felis eu enim egestas feugiat ut sit amet arcu. Nunc eu malesuada nunc. Nam felis lectus, convallis eu commodo eget, vehicula quis sem. Nulla egestas bibendum consequat. Pellentesque tristique lacus at leo dapibus pulvinar.","op":-1,"or":200,"ot":"05:21-08:00","rx":[1,4,10],"vr":200,"vt":"05:24-08:00"}
+{"items":[{"data":{"title":"Day 9 of Cycle #13","bf":98.6,"br":1,"bt":"05:12-08:00","cd":9,"cf":"s","cm":"w","cp":"l","d":"2014-01-15","ft":1,"fu":1,"f":3,"hp":-1,"ic":"689714","id":"689730","in":1,"mn":"h","mo":0,"ms":4,"no":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at massa sed nulla consectetur malesuada. Aliquam a sapien non sem rhoncus bibendum quis eu tellus. Nunc luctus fermentum volutpat. Praesent tortor diam, sodales ornare facilisis sit amet, consequat nec elit. Aenean at porttitor purus. Phasellus tempus congue suscipit. Vivamus in magna ante, ut cursus mi. Quisque vel ante in massa pretium condimentum non id risus. Vivamus at felis eu enim egestas feugiat ut sit amet arcu. Nunc eu malesuada nunc. Nam felis lectus, convallis eu commodo eget, vehicula quis sem. Nulla egestas bibendum consequat. Pellentesque tristique lacus at leo dapibus pulvinar.","op":-1,"or":200,"ot":"05:21-08:00","rx":[1,4,10],"vr":200,"vt":"05:24-08:00"},"links":{"ovagraph_node_view":"http:\/\/www.ovagraph.com\/records\/1\/readings\/689730"}}]}
 EOD;
     $payload = new Payload('application/vnd.collection+json', $subject);
     $result = CollectionJsonToJson::translate($payload);
@@ -580,7 +646,7 @@ EOD;
 }    
 EOD;
     $control = <<<EOD
-[{"full-name":"J. Doe","email":"jdoe@example.org"},{"full-name":"M. Smith","email":"msmith@example.org"},{"full-name":"R. Williams","email":"rwilliams@example.org"}]
+{"items":[{"data":{"full-name":"J. Doe","email":"jdoe@example.org"}},{"data":{"full-name":"M. Smith","email":"msmith@example.org"}},{"data":{"full-name":"R. Williams","email":"rwilliams@example.org"}}]}
 EOD;
 
     $payload = new Payload('application/vnd.collection+json', $subject);
