@@ -55,7 +55,7 @@ class CollectionJsonToJson implements ContentTypeTranslaterInterface {
       $output->items[] = $output_item;
     }
 
-    if (count($output->items) > 0) {
+    if (!empty($output->items)) {
       switch ($root) {
         case 'collection':
           $output = (object) array('collection' => $output);
