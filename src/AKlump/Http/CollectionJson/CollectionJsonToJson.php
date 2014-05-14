@@ -27,11 +27,13 @@ class CollectionJsonToJson implements ContentTypeTranslaterInterface {
     $items = array();
     $output = new \stdClass;
 
+    $root = 'collection';
     if (isset($source->collection->items)) {
       $items = $source->collection->items;
     }
     elseif (isset($source->template->data)) {
       $items = array((object) array('data' => $source->template->data));
+      $root = 'template';
     }
 
     foreach ($items as $item) {
@@ -51,6 +53,18 @@ class CollectionJsonToJson implements ContentTypeTranslaterInterface {
         }
       }
       $output->items[] = $output_item;
+    }
+
+    if (count($output->items) > 0) {
+      switch ($root) {
+        case 'collection':
+          $output = (object) array('collection' => $output);
+          break;
+        
+        case 'template':
+          $output = (object) array('template' => reset($output->items));
+          break;
+      }
     }
 
     if (isset($source->collection->error)) {
