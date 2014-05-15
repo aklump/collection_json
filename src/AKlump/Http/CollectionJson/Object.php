@@ -97,6 +97,41 @@ abstract class Object {
   }
 
   /**
+   * Checks to see if an object has a link by name.
+   *
+   * @param  string  $name
+   *
+   * @return boolean       
+   */
+  public function hasLinkByName($name) {
+    foreach ($this->getLinks() as $link) {
+      if ($link->getName() == $name) {
+        return TRUE;
+      }
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Returns a link object by name
+   *
+   * @param  string $name
+   *
+   * @return AKlump\Http\CollectionJson\Link
+   *   If not found an empty link will be returned for chaining.
+   */
+  public function getLinkByName($name) {
+    foreach ($this->getLinks() as $link) {
+      if ($link->getName() == $name) {
+        return $link;
+      }
+    }
+
+    return new Link(NULL, NULL, NULL, NULL);
+  }
+
+  /**
    * Set the prompt.
    *
    * @param string $prompt
@@ -210,6 +245,42 @@ abstract class Object {
     return $this->data['data'];
   }
 
+  /**
+   * Checks if data exists by a given name string.
+   *
+   * @param  string  $name
+   *
+   * @return boolean       
+   */
+  public function hasDataByName($name) {
+    foreach ($this->getDataArray() as $data) {
+      if ($data->getName() === $name) {
+        return TRUE;
+      }
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Returns a data object by name
+   *
+   * @param  string $name
+   *
+   * @return AKlump\Http\CollectionJson\Data
+   *   If the data doesn't exist an empty Data object will be returned for
+   *   chaining purposes.
+   */
+  public function getDataByName($name) {
+    foreach ($this->getDataArray() as $data) {
+      if ($data->getName() === $name) {
+        return $data;
+      }
+    }
+
+    return new Data(NULL, NULL, NULL);
+  }
+  
   /**
    * Returns a stdClass object of this class
    *

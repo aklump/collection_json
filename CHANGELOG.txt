@@ -1,0 +1,4 @@
+## Version: 0.5
+* The order of arguments to the _Link_ object has changed, please update your scripts to reflect the new order which is.
+
+        __construct($href, $rel, $name = '', $render = 'link', $prompt = '')
