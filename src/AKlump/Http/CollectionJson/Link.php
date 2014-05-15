@@ -6,7 +6,7 @@ namespace AKlump\Http\CollectionJson;
  */
 class Link extends Object {
   
-  public function __construct($href, $rel, $render = '', $name = '', $prompt = '') {
+  public function __construct($href, $rel, $name = '', $render = 'link', $prompt = '') {
     $this->setHref($href);
     $this->setRel($rel);
     $this->setName($name);

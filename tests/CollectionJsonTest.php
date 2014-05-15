@@ -10,6 +10,21 @@ require_once dirname(__FILE__) . '/../vendor/autoload.php';
 
 class CollectionJsonTest extends \PHPUnit_Framework_TestCase {
 
+  public function testHasGetLinkByName() {
+    $obj = new Collection;
+    $obj->setLinks(array(
+      new Link('http://www.google.com', 'alternate', 'google'),
+      new Link('http://www.yahoo.com', 'alternate', 'yahoo'),
+    ));
+    $this->assertTrue($obj->hasLinkByName('google'));
+    $this->assertTrue($obj->hasLinkByName('yahoo'));
+    $this->assertFalse($obj->hasLinkByName('bing'));
+
+    $this->assertSame('http://www.google.com', $obj->getLinkByName('google')->getHref());
+    $this->assertSame('http://www.yahoo.com', $obj->getLinkByName('yahoo')->getHref());
+    $this->assertSame('', $obj->getLinkByName('bing')->getHref());
+  }
+
   public function testCollectionError() {
     $obj = new Collection();
     $obj->setError(new Error(404, 'Not Found', 'Resource not found.'));
@@ -284,8 +299,8 @@ EOD;
     $control = '{"collection":{"version":"1.0","href":"http:\/\/www.website.com\/api\/1.0\/item\/1"}}';
     $this->assertSame($control, (string) $obj);
 
-    $obj->addLink(new Link('http://www.website.com/api/1.0/item/1', 'alternate', 'link', 'view', 'View on website'));
-    $obj->addLink(new Link('http://alt.website.com/api/1.0/item/17', 'alternate', 'link', 'view', 'View on website2'));
+    $obj->addLink(new Link('http://www.website.com/api/1.0/item/1', 'alternate', 'view', 'link', 'View on website'));
+    $obj->addLink(new Link('http://alt.website.com/api/1.0/item/17', 'alternate', 'view', 'link', 'View on website2'));
     $control = '{"collection":{"version":"1.0","href":"http:\/\/www.website.com\/api\/1.0\/item\/1","links":[{"href":"http:\/\/www.website.com\/api\/1.0\/item\/1","rel":"alternate","name":"view","render":"link","prompt":"View on website"},{"href":"http:\/\/alt.website.com\/api\/1.0\/item\/17","rel":"alternate","name":"view","render":"link","prompt":"View on website2"}]}}';
     $this->assertSame($control, (string) $obj);
 
@@ -334,11 +349,11 @@ EOD;
   }
 
   public function testLink() {
-    $obj = new Link('http://www.website.com/api/1.0/item/1', 'alternate');
-    $control = '{"href":"http:\/\/www.website.com\/api\/1.0\/item\/1","rel":"alternate"}';
+    $obj = new Link('http://www.website.com/api/1.0/item/1', 'alternate', 'website');
+    $control = '{"href":"http:\/\/www.website.com\/api\/1.0\/item\/1","rel":"alternate","name":"website","render":"link"}';
     $this->assertSame($control, (string) $obj);
 
-    $obj = new Link('http://www.website.com/api/1.0/item/1', 'alternate', 'link', 'view', 'View on website');
+    $obj = new Link('http://www.website.com/api/1.0/item/1', 'alternate', 'view', 'link', 'View on website');
     $control = '{"href":"http:\/\/www.website.com\/api\/1.0\/item\/1","rel":"alternate","name":"view","render":"link","prompt":"View on website"}';
     $this->assertSame($control, (string) $obj);
   }
@@ -367,11 +382,11 @@ EOD;
       new Data('age', 39, 'Age'),
       new Data('color', 'black'),
     ), array(
-      new Link('http://www.website.com/node/1', 'alternate'),
-      new Link('http://www.website.com/image.jpg', 'photo', 'image'),
+      new Link('http://www.website.com/node/1', 'alternate', 'node'),
+      new Link('http://www.website.com/image.jpg', 'photo', 'photo', 'image'),
     ));
     $control = <<<EOD
-{"href":"http:\/\/www.website.com\/api\/1.0\/item\/1","data":[{"name":"first","value":"Clark","prompt":"First Name"},{"name":"last","value":"","prompt":"Last Name"},{"name":"age","value":39,"prompt":"Age"},{"name":"color","value":"black"}],"links":[{"href":"http:\/\/www.website.com\/node\/1","rel":"alternate"},{"href":"http:\/\/www.website.com\/image.jpg","rel":"photo","render":"image"}]}
+{"href":"http:\/\/www.website.com\/api\/1.0\/item\/1","data":[{"name":"first","value":"Clark","prompt":"First Name"},{"name":"last","value":"","prompt":"Last Name"},{"name":"age","value":39,"prompt":"Age"},{"name":"color","value":"black"}],"links":[{"href":"http:\/\/www.website.com\/node\/1","rel":"alternate","name":"node","render":"link"},{"href":"http:\/\/www.website.com\/image.jpg","rel":"photo","name":"photo","render":"image"}]}
 EOD;
     $this->assertSame($control, (string) $item);
   }

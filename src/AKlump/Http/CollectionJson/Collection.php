@@ -80,7 +80,7 @@ class Collection extends Object implements PayloadInterface {
           $render   = isset($link->render) ? $link->render : NULL;
           $name     = isset($link->name) ? $link->name : NULL;
           $prompt   = isset($link->prompt) ? $link->prompt : NULL;
-          $links[]  = new Link($link->href, $link->rel, $render, $name, $prompt);
+          $links[]  = new Link($link->href, $link->rel, $name, $render, $prompt);
         }
         $this->setLinks($links);
       }
@@ -95,7 +95,7 @@ class Collection extends Object implements PayloadInterface {
               $render   = isset($link->render) ? $link->render : NULL;
               $name     = isset($link->name) ? $link->name : NULL;
               $prompt   = isset($link->prompt) ? $link->prompt : NULL;
-              $links[]  = new Link($link->href, $link->rel, $render, $name, $prompt);
+              $links[]  = new Link($link->href, $link->rel, $name, $render, $prompt);
             }          
           }
           $dataArray = array();
