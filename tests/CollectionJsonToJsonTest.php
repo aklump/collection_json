@@ -26,7 +26,7 @@ EOD;
     $payload->setContent($subject);
 
     $json = CollectionJsonToJson::translate($payload)->getContent(); 
-    $control = '{"collection":{"items":[]}}';
+    $control = '{"collection":{}}';
     $this->assertSame($control, $json);
   }
 
@@ -114,7 +114,7 @@ EOD;
     $payload->setContent($subject);
 
     $json = CollectionJsonToJson::translate($payload)->getContent(); 
-    $control = '{"collection":{"items":[],"error":{"code":"404","message":"Cycle 9710018 does not exist.","title":"Not found"}}}';
+    $control = '{"collection":{"error":{"code":"404","message":"Cycle 9710018 does not exist.","title":"Not found"}}}';
     $this->assertSame($control, $json);
   }
 
@@ -134,7 +134,7 @@ EOD;
 EOD;
     $payload = new Payload('application/vnd.collection+json', $subject);
     $result = CollectionJsonToJson::translate($payload);
-    $control = '{"collection":{"items":[],"error":{"code":"404","message":"Cycle 9710018 does not exist.","title":"Not found"}}}';
+    $control = '{"collection":{"error":{"code":"404","message":"Cycle 9710018 does not exist.","title":"Not found"}}}';
     $this->assertSame($control, (string) $result);
 
 
@@ -145,7 +145,7 @@ EOD;
     $result = CollectionJsonToJson::translate($payload);
 
     $control = <<<EOD
-{"collection":{"items":[],"error":{"title":"Not Acceptable","code":"406","message":"Invalid query provided, double check that the fields and parameters you defined are correct and exist."}}}
+{"collection":{"error":{"title":"Not Acceptable","code":"406","message":"Invalid query provided, double check that the fields and parameters you defined are correct and exist."}}}
 EOD;
     $this->assertSame($control, $result->getContent());
   }
@@ -684,7 +684,7 @@ EOD;
   } 
 }    
 EOD;
-    $control = '{"collection":{"items":[]}}';
+    $control = '{"collection":{}}';
     $payload = new Payload('application/vnd.collection+json', $subject);
     $result = CollectionJsonToJson::translate($payload);
     $this->assertInstanceOf('\AKlump\Http\Transfer\PayloadInterface', $result);
