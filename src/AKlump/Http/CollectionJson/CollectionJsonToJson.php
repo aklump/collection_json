@@ -36,7 +36,6 @@ class CollectionJsonToJson implements ContentTypeTranslaterInterface {
       $root = 'template';
     }
 
-    $output->items = array();
     foreach ($items as $item) {
       $output_item = new \stdClass;
       if (isset($item->data)) {
