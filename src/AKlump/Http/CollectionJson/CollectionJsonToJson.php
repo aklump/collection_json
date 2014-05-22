@@ -40,7 +40,9 @@ class CollectionJsonToJson implements ContentTypeTranslaterInterface {
       $output_item = new \stdClass;
       if (isset($item->data)) {
         foreach ($item->data as $data) {
-          $output_item->data->{$data->name} = $data->value;
+          if (!empty($data->name)) {
+            $output_item->data->{$data->name} = $data->value;
+          }
         }
       }
       if (isset($item->links)) {
