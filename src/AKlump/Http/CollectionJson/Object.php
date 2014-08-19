@@ -280,6 +280,47 @@ abstract class Object {
 
     return new Data(NULL, NULL, NULL);
   }
+
+  /**
+   * Find item(s) based on data criteria.
+   *
+   * @param  array $query
+   *   One or more name/value pairs to match on.  They will be combined
+   *   with an AND join.  If you're looking for all items that have 'blond'
+   *   as the value of a data item with the name 'hair_color', then you 
+   *   would pass: array('hair_color' => 'blond').
+   *
+   * @return array
+   */
+  public function findItems($query) {
+    $matches = array();
+    foreach ($this->getItems() as $key => $item) {
+      $hits = 0;
+      foreach ($query as $name => $value) {
+        if ($item->getDataByName($name)->getValue() == $value) {
+          ++$hits;
+        }
+      }
+      if ($hits == count($query)) {
+        $matches[$key] = $item;
+      }
+    }
+
+    return $matches;
+  }
+
+  /**
+   * Return the first matched item.
+   *
+   * @param  array $query array
+   *
+   * @return Item
+   *
+   * @see findItems().
+   */
+  public function findFirstItem($query) {
+    return ($i = $this->findItems($query)) ? reset($i) : NULL;
+  }
   
   /**
    * Returns a stdClass object of this class
