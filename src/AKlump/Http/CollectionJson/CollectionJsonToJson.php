@@ -9,7 +9,7 @@ use \AKlump\Http\Transfer\Payload;
  */
 class CollectionJsonToJson implements ContentTypeTranslaterInterface {
 
-  public function translate(PayloadInterface $payload) {
+  public static function translate(PayloadInterface $payload) {
 
     if ($payload->getContentType() === 'application/json') {
       return clone $payload;
@@ -37,7 +37,7 @@ class CollectionJsonToJson implements ContentTypeTranslaterInterface {
     }
 
     foreach ($items as $item) {
-      $output_item = new \stdClass;
+      $output_item = (object) array('data' => new \stdClass);
       if (isset($item->data)) {
         foreach ($item->data as $data) {
           if (!empty($data->name)) {
@@ -50,6 +50,9 @@ class CollectionJsonToJson implements ContentTypeTranslaterInterface {
           if (!empty($link->name)) {
             $render = isset($link->render) ? $link->render : 'link';
             $key = $render . 's';
+            if (!isset($output_item->{$key})) {
+              $output_item->{$key} = new \stdClass;
+            }
             $output_item->{$key}->{$link->name} = $link->href;
           }
         }

@@ -14,5 +14,5 @@ interface ContentTypeTranslaterInterface {
    * @return FALSE|PayloadInterface
    *   A new payload object in the new content type or false on failure.
    */
-  public function translate(PayloadInterface $payload);
+  public static function translate(PayloadInterface $payload);
 }
