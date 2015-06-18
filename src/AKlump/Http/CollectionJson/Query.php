@@ -7,6 +7,7 @@ namespace AKlump\Http\CollectionJson;
 class Query extends Object {
   
   public function __construct($href, $dataArray, $rel = '', $prompt = '') {
+    parent::__construct();
     $this->setHref($href);
     $this->setDataArray($dataArray);
     $this->setRel($rel);
