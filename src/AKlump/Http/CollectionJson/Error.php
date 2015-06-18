@@ -7,6 +7,7 @@ namespace AKlump\Http\CollectionJson;
 class Error extends Object {
   
   public function __construct($code, $title = '', $message = '') {
+    parent::__construct();
     if (empty($title)) {
       $title = 'Error';
     }

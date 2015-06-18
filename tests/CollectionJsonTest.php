@@ -10,6 +10,27 @@ require_once dirname(__FILE__) . '/../vendor/autoload.php';
 
 class CollectionJsonTest extends \PHPUnit_Framework_TestCase {
 
+  public function testExampleCode() {
+    $col = new Collection('http://www.intheloftstudios.com/api/1.0/packages');
+
+    // Add an item to the collection.
+    $col->addItem(new Item('http://www.intheloftstudios.com/api/1.0/packages', array(
+      new Data('title', 'CollectionJson', 'Title'),
+      new Data('author', 'Aaron Klump', 'Author'),
+    ), array(
+      new Link('http://www.intheloftstudios.com/collection-json', 'item'),
+    )));
+
+    // Add the template.
+    $col->setTemplate(new Template(array(
+      new Data('title', '', 'Title'),
+      new Data('author', '', 'Author'),
+    )));
+
+    $json = strval($col);
+    $this->assertSame('{"collection":{"version":"1.0","href":"http:\/\/www.intheloftstudios.com\/api\/1.0\/packages","items":[{"href":"http:\/\/www.intheloftstudios.com\/api\/1.0\/packages","data":[{"name":"title","value":"CollectionJson","prompt":"Title"},{"name":"author","value":"Aaron Klump","prompt":"Author"}],"links":[{"href":"http:\/\/www.intheloftstudios.com\/collection-json","rel":"item","render":"link"}]}],"template":{"data":[{"name":"title","value":"","prompt":"Title"},{"name":"author","value":"","prompt":"Author"}]}}}', $json);
+  }
+
   public function testHasGetLinkByName() {
     $obj = new Collection;
     $obj->setLinks(array(

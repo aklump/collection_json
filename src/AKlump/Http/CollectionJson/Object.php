@@ -6,16 +6,32 @@ namespace AKlump\Http\CollectionJson;
  */
 abstract class Object {
 
-  protected $data = array(
-    'href' => '',
-    'links' => array(),
-    'name' => '',
-    'value' => NULL,
-    'prompt' => '',
-    'data' => array(),
-    'rel' => '',
-    'items' => array(),
-  );
+  protected $data = array();
+
+  public function __construct() {
+    $this->flush();
+  }
+  
+  /**
+   * Flushes all data and leaves an empty container.
+   *
+   * @return $this
+   */
+  public function flush() {
+    $this->data = array(
+      'href' => '',
+      'links' => array(),
+      'name' => '',
+      'value' => NULL,
+      'prompt' => '',
+      'data' => array(),
+      'rel' => '',
+      'items' => array(),
+    );
+
+    return $this;
+  }
+
 
   /**
    * Set the items array.
@@ -214,7 +230,7 @@ abstract class Object {
    *
    * @return $this
    */  
-  public function setDataArray($data) {
+  public function setDataArray(Array $data) {
     $this->data['data'] = array();
     foreach($data as $data) {
       $this->addData($data);
@@ -333,5 +349,168 @@ abstract class Object {
 
   public function __toString() {
     return json_encode($this->asStdClass());
+  }
+
+  protected function checkKeys() {
+    $args = func_get_args();
+    $haystack = array_shift($args);
+    foreach ($args as $key) {
+      if (!array_key_exists($key, $haystack)) {
+        return FALSE;
+      }
+    }
+    return TRUE;
+  }
+
+  /**
+   * Tries to return an object based on a JSON string.
+   *
+   * @param  string $json
+   * @param  Object $obj  If the type of object is known, and you want only
+   * to extract the data from the json and set it on $obj, then provide
+   * $obj here.  Otherwise the object will be guessed by analyzing the JSON.
+   *
+   * @return Object
+   *
+   * @see  Collection::setContent
+   */
+  public static function import($json, Object $obj = NULL) {
+    if (!($data = json_decode($json))) {
+      throw new \InvalidArgumentException("Import source is not valid JSON.");
+    }
+
+    $data = (array) $data;
+    $understood = FALSE;
+
+    // A "Collection" object represented by the JSON.
+    if ($obj instanceof Collection || self::checkKeys($data, 'collection')) {
+      $understood = TRUE;
+      $data = (array) $data['collection'];
+      $data += array('href' => '', 'items' => array(), 'links' => array(), 'queries' => array(), 'template' => '', 'version' => '1.0');
+
+      $obj = isset($obj) ? $obj : new Collection('');
+      $obj->setHref($data['href']);
+
+      $obj->setItems(array());
+      foreach ($data['items'] as $value) {
+        $value = json_encode($value);
+        $obj->addItem(Object::import($value, new Item(NULL)));
+      }
+
+      foreach ($data['links'] as $value) {
+        $value = json_encode($value);
+        $obj->addLink(Object::import($value, new Link(NULL, NULL)));
+      }
+
+      foreach ($data['queries'] as $value) {
+        $value = json_encode($value);
+        $obj->addQuery(Object::import($value, new Query(NULL, array())));
+      }
+
+      if (!empty($data['template'])) {
+        $value = json_encode(array('template' => $data['template']));
+        $obj->setTemplate($template = Object::import($value, new Template));  
+      }
+
+      if (!empty($data['version'])) {
+        $obj->setVersion($data['version']);
+      }
+
+      if (!empty($data['error'])) {
+        $value = json_encode($data['error']);
+        $obj->setError(Object::import($value, new Error(NULL)));
+      }
+    }
+
+    // A "Data" object.
+    elseif ($obj instanceof Data || self::checkKeys($data, 'name', 'value')) {
+      $understood = TRUE;
+      $data += array('name' => '', 'value' => '','prompt' => '');
+
+      $obj = isset($obj) ? $obj : new Data('', '');
+      $obj->setName($data['name']);
+      $obj->setValue($data['value']);
+      $obj->setPrompt($data['prompt']);
+    }
+
+    // A "Query" object
+    elseif ($obj instanceof Query || self::checkKeys($data, 'data', 'href', 'prompt')) {
+      $understood = TRUE;
+      $data += array('data' => array(), 'href' => '', 'prompt' => '', 'rel' => '');
+      $dataArray  = array();
+      foreach ($data['data'] as $value) {
+        $value       = json_encode($value);
+        $dataArray[] = Object::import($value);
+      }
+      
+      $obj = isset($obj) ? $obj : new Query('', array());
+      $obj->setHref($data['href']);
+      $obj->setDataArray($dataArray);
+      $obj->setRel($data['rel']);
+      $obj->setPrompt($data['prompt']);
+    }
+
+    // A "Link" object.
+    elseif ($obj instanceof Link || self::checkKeys($data, 'href', 'rel')) {
+      $understood = TRUE;
+      $data += array('name' => '', 'render' => 'link', 'prompt' => '');
+      $obj = new Link($data['href'], $data['rel'], $data['name'], $data['render'], $data['prompt']);
+    }
+
+    // An "Item" object
+    elseif ($obj instanceof Item || self::checkKeys($data, 'data', 'href')) {
+      $understood = TRUE;
+      $data += array('links' => array());
+      $dataArray  = array();
+      $linksArray = array();
+
+      $obj = isset($obj) ? $obj : new Item(NULL);
+      $obj->setHref($data['href']);      
+
+      foreach ($data['data'] as $value) {
+        $value       = json_encode($value);
+
+        // We sent an empty Data object here so that we remove any chance
+        // of misinterpretation of the json due to missing optional keys.
+        // We do this because we have greater, contextual knowledge at this
+        // point than when it tries to import just the JSON.
+        $obj->addData(Object::import($value, new Data(NULL, NULL)));
+      }
+
+      foreach ($data['links'] as $value) {
+        $value       = json_encode($value);
+        $obj->addLink(Object::import($value, new Link(NULL, NULL)));
+      }
+    }
+
+    // A "Template" object
+    elseif ($obj instanceof Template || self::checkKeys($data, 'template')) {
+      $understood = TRUE;
+      $data       = (array) $data['template'];
+      $data += array('data' => array());
+      $obj = isset($obj) ? $obj : new Template;
+
+      foreach ($data['data'] as $value) {
+        $value       = json_encode($value);
+        $obj->addData(Object::import($value, new Data(NULL, NULL)));
+      }
+    }
+
+    // An "Error" object.
+    elseif ($obj instanceof Error || self::checkKeys($data, 'code')) {
+      $understood = TRUE;
+      $data += array('title' => '', 'message' => '',);
+
+      $obj = isset($obj) ? $obj : new Error('');
+      $obj->setCode($data['code']);
+      $obj->setTitle($data['title']);
+      $obj->setMessage($data['message']);
+    }    
+
+    if (!$understood) {
+      throw new \InvalidArgumentException("Unable to understand the import source.");
+    }
+
+    return $obj;
   }
 }

@@ -7,6 +7,7 @@ namespace AKlump\Http\CollectionJson;
 class Data extends Object {
   
   public function __construct($name, $value, $prompt = '') {
+    parent::__construct();
     $this->setName($name);
     $this->setValue($value);
     $this->setPrompt($prompt);

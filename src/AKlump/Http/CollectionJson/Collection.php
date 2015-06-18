@@ -6,12 +6,38 @@ use \AKlump\Http\Transfer\PayloadInterface;
  * Represents a Collection.
  *
  * This is a standalone object, as is Template.
+ *
+ * Here is an example of how you would quickly build a collection and print
+ * out the JSON.
+ * @code
+ *  <?php
+ *   $col = new Collection('http://www.intheloftstudios.com/api/1.0/packages'); 
+ * 
+ *   // Add an item to the collection.
+ *   $col->addItem(new Item('http://www.intheloftstudios.com/api/1.0/packages', array(
+ *     new Data('title', 'CollectionJson', 'Title'),
+ *     new Data('author', 'Aaron Klump', 'Author'),
+ *   ), array(
+ *     new Link('http://www.intheloftstudios.com/collection-json', 'item'),
+ *   )));
+ * 
+ *   // Add the template.
+ *   $col->setTemplate(new Template(array(
+ *     new Data('title', '', 'Title'),
+ *     new Data('author', '', 'Author'),
+ *   )));
+ * 
+ *   $json = strval($col);
+ * @endcode
+ *
+ * @see  Object::Import
  */
 class Collection extends Object implements PayloadInterface {
 
   protected $template, $error;
 
   public function __construct($href = '') {
+    parent::__construct();
     $this->setHref($href);
     if (empty($this->data['version'])) {
       $this->data['version'] = "1.0";
@@ -60,88 +86,26 @@ class Collection extends Object implements PayloadInterface {
     return 'application/vnd.collection+json';
   }  
 
+  /**
+   * Sets the content of the Collection from a JSON string.
+   *
+   * @param string $content JSON.
+   */
   public function setContent($content) {
-    $obj = json_decode((string) $content);
+    $obj = Object::import($content);
 
-    if (isset($obj->collection)) {
-      $obj = $obj->collection;
-
-      if (isset($obj->version)) {
-        $this->setVersion($obj->version);
-      }
-          
-      if (isset($obj->href)) {
-        $this->setHref($obj->href);
-      }
-
-      if (isset($obj->links)) {
-        $links = array();
-        foreach ($obj->links as $link) {
-          $render   = isset($link->render) ? $link->render : NULL;
-          $name     = isset($link->name) ? $link->name : NULL;
-          $prompt   = isset($link->prompt) ? $link->prompt : NULL;
-          $links[]  = new Link($link->href, $link->rel, $name, $render, $prompt);
-        }
-        $this->setLinks($links);
-      }
-
-      if (isset($obj->items)) {
-        $items = array();
-        foreach ($obj->items as $item) {
-
-          $links = array();
-          if (isset($item->links)) {
-            foreach ($item->links as $link) {
-              $render   = isset($link->render) ? $link->render : NULL;
-              $name     = isset($link->name) ? $link->name : NULL;
-              $prompt   = isset($link->prompt) ? $link->prompt : NULL;
-              $links[]  = new Link($link->href, $link->rel, $name, $render, $prompt);
-            }          
-          }
-          $dataArray = array();
-          if (isset($item->data)) {
-            foreach ($item->data as $data) {
-              $prompt = isset($data->prompt) ? $data->prompt : NULL;
-              $dataArray[] = new Data($data->name, $data->value, $prompt);
-            }
-          }
-  
-          $items[]  = new Item($item->href, $dataArray, $links);
-        }
-        $this->setItems($items);
-      }
-
-      if (isset($obj->queries)) {
-        $queries = array();
-        foreach ($obj->queries as $query) {
-          $dataArray = array();
-          if (isset($query->data)) {
-            foreach ($query->data as $data) {
-              $prompt = isset($data->prompt) ? $data->prompt : NULL;
-              $dataArray[] = new Data($data->name, $data->value, $prompt);
-            }
-          }
-          $rel       = isset($query->rel) ? $query->rel : NULL;
-          $prompt    = isset($query->prompt) ? $query->prompt : NULL;
-          $queries[] = new Query($query->href, $dataArray, $rel, $prompt);
-        }
-        $this->setQueries($queries);
-      }
-
-      if (isset($obj->template)) {
-        $t = new Template();
-        $t->setContent(json_encode($obj));
-        $this->setTemplate($t);
-      }
-
-      if (isset($obj->error)) {
-        $code     = isset($obj->error->code) ? $obj->error->code : '';
-        $title    = isset($obj->error->title) ? $obj->error->title : '';
-        $message  = isset($obj->error->message) ? $obj->error->message : '';
-        $this->setError(new Error($code, $title, $message));
-      }
+    $this->setVersion($obj->getVersion());
+    $this->setHref($obj->getHref());
+    $this->setLinks($obj->getLinks());
+    $this->setItems($obj->getItems());
+    $this->setQueries($obj->getQueries());
+    if ($t = $obj->getTemplate()) {
+      $this->setTemplate($t);
     }
-
+    if ($e = $obj->getError()) {
+      $this->setError($e);
+    }
+    
     return $this;
   }
   
