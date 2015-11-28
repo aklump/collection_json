@@ -5,6 +5,7 @@ use \AKlump\Http\Transfer\PayloadInterface;
 use \AKlump\Http\Transfer\Payload;
 use \Spatie\ArrayToXml\ArrayToXml;
 use \AKlump\LoftLib\Code\String;
+use \AKlump\LoftLib\Code\Grammar;
 
 require_once dirname(__FILE__) . '/../../../../vendor/autoload.php';
 
@@ -56,6 +57,7 @@ class JsonToXml extends ContentTypeTranslator {
    * @return string The converted string
    */
   public static function modifyXmlKey($key) {
+    $key = Grammar::singular($key);
     return String::lowerCamel(str_replace('.', '_', $key));
   }  
 

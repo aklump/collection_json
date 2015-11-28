@@ -47,13 +47,20 @@ class CollectionJsonToJson extends ContentTypeTranslator {
       if (isset($item->links)) {
         foreach ($item->links as $link) {
           if (!empty($link->name)) {
-            $render = isset($link->render) ? $link->render : 'link';
-            $key = $render . 's';
-            if (!isset($output_item->{$key})) {
-              $output_item->{$key} = new \stdClass;
-            }
-            $output_item->{$key}->{$link->name} = $link->href;
+            $name = $link->name;
           }
+          else {
+            $name = $link->href;
+            $parsed = parse_url($name);
+            unset($parsed['scheme']);
+            $name = preg_replace('/[.\/_]+/', '_', implode('_', $parsed));
+          }
+          $render = isset($link->render) ? $link->render : 'link';
+          $key = $render . 's';
+          if (!isset($output_item->{$key})) {
+            $output_item->{$key} = new \stdClass;
+          }
+          $output_item->{$key}->{$name} = $link->href;
         }
       }
       $output->items[] = $output_item;

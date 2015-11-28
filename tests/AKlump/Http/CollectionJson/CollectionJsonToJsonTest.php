@@ -12,6 +12,21 @@ require_once dirname(__FILE__) . '/../../../../vendor/autoload.php';
 
 class CollectionJsonToJsonTest extends \PHPUnit_Framework_TestCase {
 
+  public function testWhenLinkHasNoName() {
+    $obj = new Collection('http://api.local/frogs/1');
+    $item = new Item('http://api.local/frogs/1');
+    $obj->addItem($item);
+    $item->addLink(new Link('http://api.local/frogs', 'collection', 'api_local_frogs'));
+
+    $payload = new Payload('application/vnd.collection+json');
+    $payload->setContent(strval($obj));
+
+    $json = CollectionJsonToJson::translate($payload)->getContent(); 
+    $control = '{"collection":{"items":[{"data":{},"links":{"api_local_frogs":"http:\/\/api.local\/frogs"}}]}}';
+    $this->assertSame($control, $json);
+
+  }
+
   public function testWhenItemsIsEmpty() {
     $subject = <<<EOD
 { "collection" : 
@@ -665,7 +680,7 @@ EOD;
 }    
 EOD;
     $control = <<<EOD
-{"collection":{"items":[{"data":{"full-name":"J. Doe","email":"jdoe@example.org"}},{"data":{"full-name":"M. Smith","email":"msmith@example.org"}},{"data":{"full-name":"R. Williams","email":"rwilliams@example.org"}}]}}
+{"collection":{"items":[{"data":{"full-name":"J. Doe","email":"jdoe@example.org"},"links":{"examples_org_blogs_jdoe":"http:\/\/examples.org\/blogs\/jdoe"},"images":{"examples_org_images_jdoe":"http:\/\/examples.org\/images\/jdoe"}},{"data":{"full-name":"M. Smith","email":"msmith@example.org"},"links":{"examples_org_blogs_msmith":"http:\/\/examples.org\/blogs\/msmith"},"images":{"examples_org_images_msmith":"http:\/\/examples.org\/images\/msmith"}},{"data":{"full-name":"R. Williams","email":"rwilliams@example.org"},"links":{"examples_org_blogs_rwilliams":"http:\/\/examples.org\/blogs\/rwilliams"},"images":{"examples_org_images_rwilliams":"http:\/\/examples.org\/images\/rwilliams"}}]}}
 EOD;
 
     $payload = new Payload('application/vnd.collection+json', $subject);

@@ -20,7 +20,7 @@ class JsonToXmlTest extends \PHPUnit_Framework_TestCase {
     $tests = array();
 
     $tests[] = array(
-      'application/json', '{"oh.my.goodness":{}}', "<?xml version=\"1.0\"?>\n<root><ohMyGoodness/></root>\n", array('keyFormat' => 'lowerCamel')
+      'application/json', '{"oh.my.dear":{}}', "<?xml version=\"1.0\"?>\n<root><ohMyDear/></root>\n", array('keyFormat' => 'lowerCamel')
     );
 
     $tests[] = array(

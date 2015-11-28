@@ -1,5 +1,5 @@
 name = "Loft PHP Library"
 description = "Miscellaneous PHP library classes from In the Loft Studios."
 homepage = http://www.intheloftstudios.com/packages/php/loft_php_lib
-version = "0.3.6"
+version = "0.4"
 author = Aaron Klump <sourcecode@intheloftstudios.com>
