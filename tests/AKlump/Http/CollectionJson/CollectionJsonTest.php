@@ -6,7 +6,7 @@
  */
 
 namespace AKlump\Http\CollectionJson;
-require_once dirname(__FILE__) . '/../vendor/autoload.php';
+require_once dirname(__FILE__) . '/../../../../vendor/autoload.php';
 
 class CollectionJsonTest extends \PHPUnit_Framework_TestCase {
 

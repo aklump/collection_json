@@ -8,7 +8,7 @@
 namespace AKlump\Http\CollectionJson;
 use AKlump\Http\Transfer\Payload;
 
-require_once dirname(__FILE__) . '/../vendor/autoload.php';
+require_once dirname(__FILE__) . '/../../../../vendor/autoload.php';
 
 class CollectionJsonToJsonTest extends \PHPUnit_Framework_TestCase {
 
@@ -591,7 +591,8 @@ EOD;
   public function testTextHtmlGoingInShouldFail() {
     $payload = new Payload('text/html', '<div>name: aaron</div>');
     $result = CollectionJsonToJson::translate($payload);
-    $this->assertSame('Bad content type: text/html', $result->getContent());
+    $this->assertSame('Unable to recognize/translate mime type: text/html', $result->getContent());
+    $this->assertSame('text/error', $result->getContentType());
   }
 
   public function testCollection() {

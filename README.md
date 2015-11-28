@@ -1,3 +1,8 @@
+## How to create a collection object programatically
+
+
+
+
 ## Creating objects from JSON strings
 
 The key method will be `Object::import`, which converts JSON strings into the appropriate object based on it's format.

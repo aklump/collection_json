@@ -40,10 +40,12 @@ abstract class Object {
    *
    * @return $this
    */
-  public function setItems($items) {
+  public function setItems(Array $items = NULL) {
     $this->data['items'] = array();
-    foreach($items as $item) {
-      $this->addItem($item);
+    if ($items) {
+      foreach($items as $item) {
+        $this->addItem($item);
+      }
     }
   
     return $this;
@@ -93,12 +95,14 @@ abstract class Object {
     return $this->data['rel'];
   }
 
-  public function setLinks($links) {
+  public function setLinks(Array $links = NULL) {
     $this->data['links'] = array();
-    foreach($links as $link) {
-      $this->addLink($link);
+    if ($links) {
+      foreach($links as $link) {
+        $this->addLink($link);
+      }
     }
-  
+
     return $this;
   }
   
@@ -230,10 +234,12 @@ abstract class Object {
    *
    * @return $this
    */  
-  public function setDataArray(Array $data) {
+  public function setDataArray(Array $data = NULL) {
     $this->data['data'] = array();
-    foreach($data as $data) {
-      $this->addData($data);
+    if ($data) {
+      foreach($data as $data) {
+        $this->addData($data);
+      }
     }
   
     return $this;
@@ -348,10 +354,13 @@ abstract class Object {
   //abstract protected function asStdClass();
 
   public function __toString() {
+    // Do not alter this for pretty print, needs to happen elsewhere
+    // due to the fact that we might use this statically and so there's
+    // no way to set this->options or similar strategy.
     return json_encode($this->asStdClass());
   }
 
-  protected function checkKeys() {
+  protected static function checkKeys() {
     $args = func_get_args();
     $haystack = array_shift($args);
     foreach ($args as $key) {
