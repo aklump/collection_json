@@ -22,6 +22,30 @@ class Data extends Object {
       $obj->prompt = $p;
     }
 
+    $this->handleValues($obj->value);
+
     return $obj;
   }
+
+  /**
+   * Recursively process the $value and convert to stdClass
+   *
+   * @param  mixed &$value
+   *   - array
+   *   - object with method asStdClass
+   *   - ...
+   *
+   * @return \stdClass
+   */
+  protected function handleValues(&$value) {
+    if (is_array($value)) {
+      foreach ($value as &$v) {
+        $this->handleValues($v);
+      }
+    }
+    elseif (method_exists($value, 'asStdClass')) {
+      $value = $value->asStdClass();
+    }
+    return $value;
+  }  
 }

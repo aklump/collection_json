@@ -50,7 +50,7 @@ class Collection extends Object implements PayloadInterface {
     }
   }
 
-  protected function asStdClass() {
+  public function asStdClass() {
     $obj = new \stdClass;
     $obj->version = $this->getVersion();
     $obj->href = $this->getHref();
