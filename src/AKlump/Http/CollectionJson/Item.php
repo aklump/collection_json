@@ -5,7 +5,7 @@ namespace AKlump\Http\CollectionJson;
  * Represents an item.
  */
 class Item extends Object {
-  public function __construct($href, $dataArray = array(), $links = array()) {
+  public function __construct($href, Array $dataArray = NULL, Array $links = NULL) {
     parent::__construct();
     $this->setHref($href);
     $this->setDataArray($dataArray);

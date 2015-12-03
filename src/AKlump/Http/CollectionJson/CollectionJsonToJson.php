@@ -1,13 +1,13 @@
 <?php
 namespace AKlump\Http\CollectionJson;
-use \AKlump\Http\Transfer\ContentTypeTranslaterInterface;
+use \AKlump\Http\Transfer\ContentTypeTranslator;
 use \AKlump\Http\Transfer\PayloadInterface;
 use \AKlump\Http\Transfer\Payload;
 
 /**
  * Represents a ContentTypeTranslator for "application/vnd.collection+json" to "application/json"
  */
-class CollectionJsonToJson implements ContentTypeTranslaterInterface {
+class CollectionJsonToJson extends ContentTypeTranslator {
 
   public static function translate(PayloadInterface $payload) {
 
@@ -19,8 +19,7 @@ class CollectionJsonToJson implements ContentTypeTranslaterInterface {
     if (!in_array($payload->getContentType(), array(
       'application/vnd.collection+json'
     ))) {
-      $obj->setContent('Bad content type: ' . $payload->getContentType());
-      return $obj;
+      return static::failedTranslation($payload);
     }
     
     $source = json_decode($payload->getContent());
@@ -48,13 +47,20 @@ class CollectionJsonToJson implements ContentTypeTranslaterInterface {
       if (isset($item->links)) {
         foreach ($item->links as $link) {
           if (!empty($link->name)) {
-            $render = isset($link->render) ? $link->render : 'link';
-            $key = $render . 's';
-            if (!isset($output_item->{$key})) {
-              $output_item->{$key} = new \stdClass;
-            }
-            $output_item->{$key}->{$link->name} = $link->href;
+            $name = $link->name;
           }
+          else {
+            $name = $link->href;
+            $parsed = parse_url($name);
+            unset($parsed['scheme']);
+            $name = preg_replace('/[.\/_]+/', '_', implode('_', $parsed));
+          }
+          $render = isset($link->render) ? $link->render : 'link';
+          $key = $render . 's';
+          if (!isset($output_item->{$key})) {
+            $output_item->{$key} = new \stdClass;
+          }
+          $output_item->{$key}->{$name} = $link->href;
         }
       }
       $output->items[] = $output_item;

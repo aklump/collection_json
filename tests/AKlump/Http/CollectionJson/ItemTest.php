@@ -6,7 +6,7 @@
  */
 
 namespace AKlump\Http\CollectionJson;
-require_once dirname(__FILE__) . '/../vendor/autoload.php';
+require_once dirname(__FILE__) . '/../../../../vendor/autoload.php';
 
 class ItemTest extends \PHPUnit_Framework_TestCase {
 
@@ -66,7 +66,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     $items  = $obj->getItems();
     $query  = array('resource' => 'user');
     $this->assertSame($items[0], $obj->findFirstItem($query));
-    $this->assertSame($items[0], reset($obj->findItems($query)));
+    $found = $obj->findItems($query);
+    $this->assertSame($items[0], reset($found));
     $this->assertCount(1, $obj->findItems($query));
   }
 

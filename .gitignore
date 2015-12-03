@@ -1,0 +1,9 @@
+/lib/loft_php_lib/*
+!/lib/loft_php_lib/dist
+/lib/loft_php_lib/dist/vendor/*
+!/lib/loft_php_lib/dist/vendor/composer
+/lib/loft_php_lib/dist/src/AKlump/LoftLib/*
+!/lib/loft_php_lib/dist/src/AKlump/LoftLib/Code
+/lib/loft_php_lib/dist/src/AKlump/LoftLib/Code/*
+!/lib/loft_php_lib/dist/src/AKlump/LoftLib/Code/String.php
+!/lib/loft_php_lib/dist/src/AKlump/LoftLib/Code/Grammer.php

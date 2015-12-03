@@ -9,7 +9,7 @@ use \AKlump\Http\Transfer\PayloadInterface;
  */
 class Template extends Object implements PayloadInterface {
   
-  public function __construct($dataArray = array()) {
+  public function __construct(Array $dataArray = NULL) {
     parent::__construct();
     $this->setDataArray($dataArray);
   }

@@ -6,16 +6,15 @@
  */
 
 namespace AKlump\Http\CollectionJson;
-require_once dirname(__FILE__) . '/../vendor/autoload.php';
+require_once dirname(__FILE__) . '/../../../../vendor/autoload.php';
 
 class ObjectTest extends \PHPUnit_Framework_TestCase {
-  
+
   public function testErrorImport() {
     $control = '{"collection":{"version":"1.0","href":"","error":{"title":"Not Found","code":"404","message":"Resource not found."}}}';
     $obj = Object::import($control);
     $this->assertSame($control, strval($obj));
   }
-  
 
   /**
    * Provides data for testImportStrings.
@@ -63,7 +62,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase {
     $return[] = array($query, strval($query));
     $return[] = array($template, strval($template));
     $return[] = array($collection, strval($collection));
-    
+
     return $return;
   }
   
@@ -83,7 +82,6 @@ class ObjectTest extends \PHPUnit_Framework_TestCase {
   
   /**
    * @expectedException \Exception
-   * @expectedExceptionMessage Unable to understand the import source.
    */
   public function testValidJsonButCannotUnderstandException() {
     Object::import('["do","re","mi"]');

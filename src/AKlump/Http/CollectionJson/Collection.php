@@ -50,7 +50,7 @@ class Collection extends Object implements PayloadInterface {
     }
   }
 
-  protected function asStdClass() {
+  public function asStdClass() {
     $obj = new \stdClass;
     $obj->version = $this->getVersion();
     $obj->href = $this->getHref();
@@ -164,7 +164,7 @@ class Collection extends Object implements PayloadInterface {
    *
    * @return $this
    */  
-  public function setQueries($queries) {
+  public function setQueries(Array $queries) {
     $this->data['queries'] = array();
     foreach($queries as $querie) {
       $this->addQuery($querie);

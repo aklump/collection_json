@@ -1,0 +1,25 @@
+{
+    "authors": [
+        {
+            "email": "sourcecode@intheloftstudios.com",
+            "homepage": "http://www.intheloftstudios.com",
+            "name": "Aaron Klump",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "files": ["src/AKlump/LoftLib/Xml/LoftXmlElement.php"],
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "description": "Miscellaneous PHP library classes from In the Loft Studios.",
+    "homepage": "http://www.intheloftstudios.com/packages/php/loft_php_lib",
+    "license": "BSD-3-Clause",
+    "name": "aklump/loft_php_lib",
+    "require": {
+        "php": ">=5.3.0",
+        "symfony/yaml": "^2.7"
+    },
+    "type": "library"
+}
