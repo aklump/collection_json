@@ -1,5 +1,5 @@
 name = "Collection+Json for PHP"
 description = "Php objects for working with hypermedia Collection+JSON (http://amundsen.com/media-types/)"
 homepage = http://www.intheloftstudios.com/packages/php/collection_json
-version = "0.8.1"
+version = "0.8.2"
 author = Aaron Klump <sourcecode@intheloftstudios.com>
