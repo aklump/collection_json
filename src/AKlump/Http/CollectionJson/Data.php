@@ -15,12 +15,12 @@ class Data extends Object {
 
   public function asStdClass() {
     $obj = (object) array(
-      'name' => $this->getName(), 
-      'value' => $this->getValue(), 
+      'name' => $this->getName(),
     );
     if ($p = $this->getPrompt()) {
       $obj->prompt = $p;
     }
+    $obj->value = $this->getValue();
 
     $this->handleValues($obj->value);
 
