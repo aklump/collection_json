@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    $baseDir . '/lib/loft_php_lib/dist/vendor/autoload.php',
+    $baseDir . '/lib/loft_php_lib/dist/vendor/composer/autoload.php',
 );

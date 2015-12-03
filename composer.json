@@ -20,6 +20,6 @@
 
   "autoload": {
     "psr-0": {"AKlump\\": "src/"},
-    "files": ["lib/loft_php_lib/dist/vendor/autoload.php"]  
+    "files": ["lib/loft_php_lib/dist/vendor/composer/autoload.php"]
   }
 }
