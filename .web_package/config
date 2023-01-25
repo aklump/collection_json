@@ -1,10 +1,10 @@
 template = false
 master = "master"
-develop = "develop"
+develop = "master"
 remote = origin
 create_tags = patch
 push_tags = auto
 push_master = auto
-push_develop = auto
+push_develop = no
 patch_prefix = .
 info_file = composer.json
