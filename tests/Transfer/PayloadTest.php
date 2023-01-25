@@ -6,9 +6,13 @@
  */
 
 namespace AKlump\Http\Transfer;
-require_once dirname(__FILE__) . '/../../../../vendor/autoload.php';
 
-class PayloadTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @covers \AKlump\Http\Transfer\Payload
+ */
+final class PayloadTest extends TestCase {
 
   public function testGetSet() {
     $obj = new Payload('application/json');

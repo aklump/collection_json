@@ -4,8 +4,8 @@ namespace AKlump\Http\CollectionJson;
 /**
  * Represents an error.
  */
-class Error extends Object {
-  
+class Error extends CollectionBase {
+
   public function __construct($code, $title = '', $message = '') {
     parent::__construct();
     if (empty($title)) {
@@ -18,7 +18,7 @@ class Error extends Object {
     $this->setCode($code);
     $this->setMessage($message);
   }
-  
+
   /**
    * Set the message.
    *
@@ -28,10 +28,10 @@ class Error extends Object {
    */
   public function setMessage($message) {
     $this->data['message'] = (string) $message;
-  
+
     return $this;
   }
-  
+
   /**
    * Return the message.
    *
@@ -40,17 +40,17 @@ class Error extends Object {
   public function getMessage() {
     return $this->data['message'];
   }
-  
+
   /**
    * Set the code.
    *
    * @param string $code
    *
    * @return $this
-   */  
+   */
   public function setCode($code) {
     $this->data['code'] = (string) $code;
-  
+
     return $this;
   }
 
@@ -58,11 +58,11 @@ class Error extends Object {
    * Return the code.
    *
    * @return string
-   */  
+   */
   public function getCode() {
     return $this->data['code'];
   }
-  
+
   /**
    * Set the title.
    *
@@ -72,24 +72,24 @@ class Error extends Object {
    */
   public function setTitle($title) {
     $this->data['title'] = (string) $title;
-  
+
     return $this;
   }
-  
+
   /**
    * Return the title.
    *
    * @return string
-   */  
+   */
   public function getTitle() {
     return $this->data['title'];
   }
 
-  public function asStdClass() {
+  public function asStdClass(): \stdClass {
     $obj = (object) array(
-      'title' => $this->getTitle(), 
-      'code' => $this->getCode(), 
-      'message' => $this->getMessage(), 
+      'title' => $this->getTitle(),
+      'code' => $this->getCode(),
+      'message' => $this->getMessage(),
     );
 
     return $obj;

@@ -4,8 +4,8 @@ namespace AKlump\Http\CollectionJson;
 /**
  * Represents a data unit.
  */
-class Data extends Object {
-  
+class Data extends CollectionBase {
+
   public function __construct($name, $value, $prompt = '') {
     parent::__construct();
     $this->setName($name);
@@ -13,7 +13,7 @@ class Data extends Object {
     $this->setPrompt($prompt);
   }
 
-  public function asStdClass() {
+  public function asStdClass(): \stdClass {
     $obj = (object) array(
       'name' => $this->getName(),
     );
@@ -47,5 +47,5 @@ class Data extends Object {
       $value = $value->asStdClass();
     }
     return $value;
-  }  
+  }
 }

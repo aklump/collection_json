@@ -6,18 +6,22 @@
  */
 
 namespace AKlump\Http\CollectionJson;
-require_once dirname(__FILE__) . '/../../../../vendor/autoload.php';
 
-class ItemTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @covers \AKlump\Http\CollectionJson\Item
+ */
+final class ItemTest extends TestCase {
 
   /**
    * A query yielding no results.
    */
   public function testFindItemNoResult() {
-    $obj    = $this->collection;
-    $items  = $obj->getItems();
-    $query  = array('resource' => 'apple');
-    
+    $obj = $this->collection;
+    $items = $obj->getItems();
+    $query = array('resource' => 'apple');
+
     $result = $obj->findItems($query);
     $this->assertSame(array(), $result);
     $this->assertCount(0, $result);
@@ -28,10 +32,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
    * A query with two criteria returns one record.
    */
   public function testFindItemTwoQueries() {
-    $obj    = $this->collection;
-    $items  = $obj->getItems();
-    $query  = array('resource' => 'cycle', 'id' => 2);
-    
+    $obj = $this->collection;
+    $items = $obj->getItems();
+    $query = array('resource' => 'cycle', 'id' => 2);
+
     $result = $obj->findItems($query);
     $this->assertSame($items[2], reset($result));
     $this->assertSame($items[2], $result[2]);
@@ -44,10 +48,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
    * A query returns two records.
    */
   public function testFindItemTwoItems() {
-    $obj    = $this->collection;
-    $items  = $obj->getItems();
-    $query  = array('resource' => 'cycle');
-    
+    $obj = $this->collection;
+    $items = $obj->getItems();
+    $query = array('resource' => 'cycle');
+
 
     $result = $obj->findItems($query);
     $this->assertSame($items[1], reset($result));
@@ -62,9 +66,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
    * A query with one criteria returns one record.
    */
   public function testFindItemSingleItem() {
-    $obj    = $this->collection;
-    $items  = $obj->getItems();
-    $query  = array('resource' => 'user');
+    $obj = $this->collection;
+    $items = $obj->getItems();
+    $query = array('resource' => 'user');
     $this->assertSame($items[0], $obj->findFirstItem($query));
     $found = $obj->findItems($query);
     $this->assertSame($items[0], reset($found));
@@ -94,8 +98,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     $this->assertSame('', $obj->getDataByName('fa')->getPrompt());
   }
 
-  public function setUp() {
+  public function setUp(): void {
     $this->collection = new Collection;
-    $this->collection->setContent('{"collection":{"href":"https://dev.ovagraph.local/api/3/changes","items":[{"data":[{"name":"resource","prompt":"Resource","value":"user"},{"name":"id","prompt":"Id","value":22264},{"name":"modified","prompt":"Modified","value":1301782272},{"name":"status","prompt":"Status","value":1}],"href":"https://dev.ovagraph.local/api/3/user/22264"},{"data":[{"name":"resource","prompt":"Resource","value":"cycle"},{"name":"id","prompt":"Id","value":1},{"name":"modified","prompt":"Modified","value":1301782272},{"name":"status","prompt":"Status","value":1}],"href":"https://dev.ovagraph.local/api/3/cycle/1"},{"data":[{"name":"resource","prompt":"Resource","value":"cycle"},{"name":"id","prompt":"Id","value":2},{"name":"modified","prompt":"Modified","value":1301782272},{"name":"status","prompt":"Status","value":1}],"href":"https://dev.ovagraph.local/api/3/cycle/2"},{"data":[{"name":"resource","prompt":"Resource","value":"day"},{"name":"id","prompt":"Id","value":1},{"name":"modified","prompt":"Modified","value":1301782272},{"name":"status","prompt":"Status","value":1}],"href":"https://dev.ovagraph.local/api/3/day/1"}],"version":"1.0"}}');    
+    $this->collection->setContent('{"collection":{"href":"https://dev.ovagraph.local/api/3/changes","items":[{"data":[{"name":"resource","prompt":"Resource","value":"user"},{"name":"id","prompt":"Id","value":22264},{"name":"modified","prompt":"Modified","value":1301782272},{"name":"status","prompt":"Status","value":1}],"href":"https://dev.ovagraph.local/api/3/user/22264"},{"data":[{"name":"resource","prompt":"Resource","value":"cycle"},{"name":"id","prompt":"Id","value":1},{"name":"modified","prompt":"Modified","value":1301782272},{"name":"status","prompt":"Status","value":1}],"href":"https://dev.ovagraph.local/api/3/cycle/1"},{"data":[{"name":"resource","prompt":"Resource","value":"cycle"},{"name":"id","prompt":"Id","value":2},{"name":"modified","prompt":"Modified","value":1301782272},{"name":"status","prompt":"Status","value":1}],"href":"https://dev.ovagraph.local/api/3/cycle/2"},{"data":[{"name":"resource","prompt":"Resource","value":"day"},{"name":"id","prompt":"Id","value":1},{"name":"modified","prompt":"Modified","value":1301782272},{"name":"status","prompt":"Status","value":1}],"href":"https://dev.ovagraph.local/api/3/day/1"}],"version":"1.0"}}');
   }
 }

@@ -6,11 +6,14 @@
  */
 
 namespace AKlump\Http\CollectionJson;
+
 use AKlump\Http\Transfer\Payload;
+use PHPUnit\Framework\TestCase;
 
-require_once dirname(__FILE__) . '/../../../../vendor/autoload.php';
-
-class CollectionJsonToJsonTest extends \PHPUnit_Framework_TestCase {
+/**
+ * @covers \AKlump\Http\CollectionJson\CollectionJsonToJson
+ */
+final class CollectionJsonToJsonTest extends TestCase {
 
   public function testWhenLinkHasNoName() {
     $obj = new Collection('http://api.local/frogs/1');
@@ -21,7 +24,7 @@ class CollectionJsonToJsonTest extends \PHPUnit_Framework_TestCase {
     $payload = new Payload('application/vnd.collection+json');
     $payload->setContent(strval($obj));
 
-    $json = CollectionJsonToJson::translate($payload)->getContent(); 
+    $json = CollectionJsonToJson::translate($payload)->getContent();
     $control = '{"collection":{"items":[{"data":{},"links":{"api_local_frogs":"http:\/\/api.local\/frogs"}}]}}';
     $this->assertSame($control, $json);
 
@@ -40,7 +43,7 @@ EOD;
     $payload = new Payload('application/vnd.collection+json');
     $payload->setContent($subject);
 
-    $json = CollectionJsonToJson::translate($payload)->getContent(); 
+    $json = CollectionJsonToJson::translate($payload)->getContent();
     $control = '{"collection":{}}';
     $this->assertSame($control, $json);
   }
@@ -106,7 +109,7 @@ EOD;
     $payload = new Payload('application/vnd.collection+json');
     $payload->setContent($subject);
 
-    $json = CollectionJsonToJson::translate($payload)->getContent(); 
+    $json = CollectionJsonToJson::translate($payload)->getContent();
     $control = '{"collection":{"items":[{"data":{"uid":"123"},"links":{"about":"http:\/\/www.ovagraph.com\/user\/123"},"images":{"avatar":"http:\/\/www.ovagraph.com\/sites\/ovagraph.com\/files\/styles\/bubble-avatar-90x100\/public\/pictures\/picture-121826-1395107651.jpg?itok=-C7H2xl2"}},{"data":{"uid":"124"},"links":{"about":"http:\/\/www.ovagraph.com\/user\/124"},"images":{"avatar":"http:\/\/www.ovagraph.com\/sites\/ovagraph.com\/files\/styles\/bubble-avatar-90x100\/public\/pictures\/picture-121826-1395107651.jpg?itok=-C7H2xl2"}}]}}';
     $this->assertSame($control, $json);
   }
@@ -128,7 +131,7 @@ EOD;
     $payload = new Payload('application/vnd.collection+json');
     $payload->setContent($subject);
 
-    $json = CollectionJsonToJson::translate($payload)->getContent(); 
+    $json = CollectionJsonToJson::translate($payload)->getContent();
     $control = '{"collection":{"error":{"code":"404","message":"Cycle 9710018 does not exist.","title":"Not found"}}}';
     $this->assertSame($control, $json);
   }
@@ -173,7 +176,7 @@ EOD;
     $this->assertInstanceOf('\AKlump\Http\Transfer\PayloadInterface', $result);
     $this->assertNotSame($payload, $result);
     $this->assertSame($subject, $result->getContent());
-    $this->assertSame($subject, (string) $result);    
+    $this->assertSame($subject, (string) $result);
   }
 
   public function testTemplate() {

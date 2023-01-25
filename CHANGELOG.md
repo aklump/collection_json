@@ -9,12 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Composer is now autoloading the remaining loft-php-lib classes (only 2)
+- BREAKING CHANGE!!! Renamed `\AKlump\Http\CollectionJson\Object` to `\AKlump\Http\CollectionJson\CollectionBase` for PHP 7 compatibility.
 - Updated web_package configuration.
+- Simplified Composer integration.
 
 ### Removed
 
-- All non-used aklump/loft-php-lib code
+- Dependency on _aklump/loft-php-lib_.
 
 ## [0.8.0] - 2015-11-27
 

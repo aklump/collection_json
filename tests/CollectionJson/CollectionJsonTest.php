@@ -6,9 +6,13 @@
  */
 
 namespace AKlump\Http\CollectionJson;
-require_once dirname(__FILE__) . '/../../../../vendor/autoload.php';
 
-class CollectionJsonTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @covers \AKlump\Http\CollectionJson\Collection
+ */
+final class CollectionJsonTest extends TestCase {
 
   public function testExampleCode() {
     $col = new Collection('http://www.intheloftstudios.com/api/1.0/packages');
@@ -41,8 +45,10 @@ class CollectionJsonTest extends \PHPUnit_Framework_TestCase {
     $this->assertTrue($obj->hasLinkByName('yahoo'));
     $this->assertFalse($obj->hasLinkByName('bing'));
 
-    $this->assertSame('http://www.google.com', $obj->getLinkByName('google')->getHref());
-    $this->assertSame('http://www.yahoo.com', $obj->getLinkByName('yahoo')->getHref());
+    $this->assertSame('http://www.google.com', $obj->getLinkByName('google')
+      ->getHref());
+    $this->assertSame('http://www.yahoo.com', $obj->getLinkByName('yahoo')
+      ->getHref());
     $this->assertSame('', $obj->getLinkByName('bing')->getHref());
   }
 
@@ -64,10 +70,10 @@ class CollectionJsonTest extends \PHPUnit_Framework_TestCase {
 EOD;
     $return = $obj->setContent($subject);
     $this->assertInstanceOf('\AKlump\Http\CollectionJson\Collection', $return);
-    
+
     $items = $obj->getItems();
     $this->assertCount(1, $items);
-    
+
     $links = $obj->getLinks();
     $this->assertCount(1, $links);
 
@@ -236,7 +242,7 @@ EOD;
     $return = $obj->setContent($subject);
     $this->assertInstanceOf('\AKlump\Http\CollectionJson\Template', $return);
     $dataArray = $obj->getDataArray();
-    $this->assertCount(0, $dataArray);    
+    $this->assertCount(0, $dataArray);
   }
 
   public function testTemplateSetContent() {
@@ -303,13 +309,13 @@ EOD;
 
   public function testQuery() {
     $obj = new Query('http://example.org/search', array(
-      new Data('search', '')
+      new Data('search', ''),
     ));
     $control = '{"href":"http:\/\/example.org\/search","rel":"","data":[{"name":"search","value":""}]}';
     $this->assertSame($control, (string) $obj);
 
     $obj = new Query('http://example.org/search', array(
-      new Data('search', '')
+      new Data('search', ''),
     ), 'search', 'Enter search string');
     $control = '{"href":"http:\/\/example.org\/search","rel":"search","prompt":"Enter search string","data":[{"name":"search","value":""}]}';
     $this->assertSame($control, (string) $obj);

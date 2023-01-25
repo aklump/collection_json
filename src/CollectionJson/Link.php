@@ -4,8 +4,8 @@ namespace AKlump\Http\CollectionJson;
 /**
  * Represents a link
  */
-class Link extends Object {
-  
+class Link extends CollectionBase {
+
   public function __construct($href, $rel, $name = '', $render = 'link', $prompt = '') {
     parent::__construct();
     $this->setHref($href);
@@ -24,7 +24,7 @@ class Link extends Object {
    */
   public function setRender($render) {
     $this->data['render'] = (string) $render;
-  
+
     return $this;
   }
 
@@ -32,15 +32,15 @@ class Link extends Object {
    * Return the render.
    *
    * @return string
-   */  
+   */
   public function getRender() {
     return $this->data['render'];
-  }  
+  }
 
-  public function asStdClass() {
+  public function asStdClass(): \stdClass {
     $obj = (object) array(
-      'href' => $this->getHref(), 
-      'rel' => $this->getRel(), 
+      'href' => $this->getHref(),
+      'rel' => $this->getRel(),
     );
     if ($n = $this->getName()) {
       $obj->name = $n;

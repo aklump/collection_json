@@ -4,7 +4,7 @@ namespace AKlump\Http\CollectionJson;
 /**
  * Represents an item.
  */
-class Item extends Object {
+class Item extends CollectionBase {
   public function __construct($href, Array $dataArray = NULL, Array $links = NULL) {
     parent::__construct();
     $this->setHref($href);
@@ -12,7 +12,7 @@ class Item extends Object {
     $this->setLinks($links);
   }
 
-  public function asStdClass() {
+  public function asStdClass(): \stdClass {
     $obj = new \stdClass;
     $obj->href = $this->getHref();
     foreach ($this->getDataArray() as $data) {
@@ -22,6 +22,6 @@ class Item extends Object {
       $obj->links[] = $l->asStdClass();
     }
 
-    return $obj;    
+    return $obj;
   }
 }

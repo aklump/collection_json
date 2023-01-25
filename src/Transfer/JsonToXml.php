@@ -1,13 +1,14 @@
 <?php
-namespace AKlump\Http\Transfer;
-use \AKlump\Http\Transfer\ContentTypeTranslaterInterface;
-use \AKlump\Http\Transfer\PayloadInterface;
-use \AKlump\Http\Transfer\Payload;
-use \Spatie\ArrayToXml\ArrayToXml;
-use \AKlump\LoftLib\Code\String;
-use \AKlump\LoftLib\Code\Grammar;
 
-require_once dirname(__FILE__) . '/../../../../vendor/autoload.php';
+namespace AKlump\Http\Transfer;
+
+use AKlump\Http\Transfer\ContentTypeTranslaterInterface;
+use AKlump\Http\Transfer\PayloadInterface;
+use AKlump\Http\Transfer\Payload;
+use Spatie\ArrayToXml\ArrayToXml;
+use AKlump\LoftLib\Code\Strings;
+use AKlump\LoftLib\Code\Grammar;
+
 
 /**
  * Converts json to xml and keys to lowerCamelCase.
@@ -20,7 +21,7 @@ class JsonToXml extends ContentTypeTranslator {
   /**
    * Translate from json to xml
    *
-   * @param  PayloadInterface $payload
+   * @param PayloadInterface $payload
    */
   public static function translate(PayloadInterface $payload) {
 
@@ -35,8 +36,9 @@ class JsonToXml extends ContentTypeTranslator {
         static::insureValidKeys($data);
         $xml = ArrayToXml::convert($data);
         $obj->setContent($xml);
+
         return $obj;
-      
+
       default:
         return static::failedTranslation($payload);
     }
@@ -57,14 +59,19 @@ class JsonToXml extends ContentTypeTranslator {
    * @return string The converted string
    */
   public static function modifyXmlKey($key) {
-    $key = Grammar::singular($key);
-    return String::lowerCamel(str_replace('.', '_', $key));
-  }  
+    $key = preg_replace('/[ _\-.]/', ' ', $key);
+    $key = ucwords($key);
+    $key = str_replace(' ', '', $key);
+    $key = strtolower(substr($key, 0, 1)) . substr($key, 1);
+
+    return $key;
+  }
+
 
   /**
    * Recursively process an array's keys passing each to modifyXmlKey().
    *
-   * @param  array &$data
+   * @param array &$data
    */
   protected static function insureValidKeys(&$data) {
     foreach (array_keys($data) as $key) {
@@ -83,16 +90,16 @@ class JsonToXml extends ContentTypeTranslator {
   /**
    * Replaces an array's key with a new one, not loosing ordre.
    *
-   * @param  array &$array
-   * @param  string $old_key
-   * @param  string $new_key
+   * @param array &$array
+   * @param string $old_key
+   * @param string $new_key
    */
   protected static function swapKey(&$array, $old_key, $new_key) {
-    $keys  = array_keys($array);
+    $keys = array_keys($array);
     $index = array_search($old_key, $keys);
-    if ($index !== false) {
+    if ($index !== FALSE) {
       $keys[$index] = $new_key;
-      $array        = array_combine($keys, $array);
+      $array = array_combine($keys, $array);
     }
   }
 }

@@ -1,17 +1,18 @@
 <?php
+
 namespace AKlump\Http\CollectionJson;
 
 /**
  * Represents the base class of shared methods for CollectionJson objects.
  */
-abstract class Object {
+abstract class CollectionBase {
 
   protected $data = array();
 
   public function __construct() {
     $this->flush();
   }
-  
+
   /**
    * Flushes all data and leaves an empty container.
    *
@@ -40,14 +41,14 @@ abstract class Object {
    *
    * @return $this
    */
-  public function setItems(Array $items = NULL) {
+  public function setItems(array $items = NULL) {
     $this->data['items'] = array();
     if ($items) {
-      foreach($items as $item) {
+      foreach ($items as $item) {
         $this->addItem($item);
       }
     }
-  
+
     return $this;
   }
 
@@ -57,18 +58,18 @@ abstract class Object {
    * @param Item $item
    *
    * @return $this
-   */  
+   */
   public function addItem(Item $item) {
     $this->data['items'][] = $item;
-  
+
     return $this;
   }
-  
+
   /**
    * Return the items array.
    *
    * @return array
-   */  
+   */
   public function getItems() {
     return $this->data['items'];
   }
@@ -82,7 +83,7 @@ abstract class Object {
    */
   public function setRel($rel) {
     $this->data['rel'] = (string) $rel;
-  
+
     return $this;
   }
 
@@ -90,28 +91,28 @@ abstract class Object {
    * Return the rel.
    *
    * @return string
-   */  
+   */
   public function getRel() {
     return $this->data['rel'];
   }
 
-  public function setLinks(Array $links = NULL) {
+  public function setLinks(array $links = NULL) {
     $this->data['links'] = array();
     if ($links) {
-      foreach($links as $link) {
+      foreach ($links as $link) {
         $this->addLink($link);
       }
     }
 
     return $this;
   }
-  
+
   public function addLink(Link $link) {
     $this->data['links'][] = $link;
-  
+
     return $this;
   }
-  
+
   public function getLinks() {
     return $this->data['links'];
   }
@@ -119,9 +120,9 @@ abstract class Object {
   /**
    * Checks to see if an object has a link by name.
    *
-   * @param  string  $name
+   * @param string $name
    *
-   * @return boolean       
+   * @return boolean
    */
   public function hasLinkByName($name) {
     foreach ($this->getLinks() as $link) {
@@ -136,7 +137,7 @@ abstract class Object {
   /**
    * Returns a link object by name
    *
-   * @param  string $name
+   * @param string $name
    *
    * @return AKlump\Http\CollectionJson\Link
    *   If not found an empty link will be returned for chaining.
@@ -160,25 +161,25 @@ abstract class Object {
    */
   public function setPrompt($prompt) {
     $this->data['prompt'] = (string) $prompt;
-  
+
     return $this;
   }
-  
+
   /**
    * Return the prompt.
    *
    * @return string
-   */  
+   */
   public function getPrompt() {
     return $this->data['prompt'];
   }
-  
+
   public function setHref($href) {
     $this->data['href'] = (string) $href;
-  
+
     return $this;
   }
-  
+
   public function getHref() {
     return $this->data['href'];
   }
@@ -192,7 +193,7 @@ abstract class Object {
    */
   public function setValue($value) {
     $this->data['value'] = $value;
-  
+
     return $this;
   }
 
@@ -200,21 +201,21 @@ abstract class Object {
    * Return the value.
    *
    * @return mixed
-   */  
+   */
   public function getValue() {
     return $this->data['value'];
   }
-  
+
   /**
    * Set the name.
    *
    * @param string $name
    *
    * @return $this
-   */  
+   */
   public function setName($name) {
     $this->data['name'] = (string) $name;
-  
+
     return $this;
   }
 
@@ -222,47 +223,47 @@ abstract class Object {
    * Return the name.
    *
    * @return string
-   */  
+   */
   public function getName() {
     return $this->data['name'];
   }
-  
+
   /**
    * Set the data array.
    *
    * @param array $data
    *
    * @return $this
-   */  
-  public function setDataArray(Array $data = NULL) {
+   */
+  public function setDataArray(array $data = NULL) {
     $this->data['data'] = array();
     if ($data) {
-      foreach($data as $data) {
+      foreach ($data as $data) {
         $this->addData($data);
       }
     }
-  
+
     return $this;
   }
-  
+
   /**
    * Adds a single data.
    *
    * @param Data $data
    *
    * @return $this
-   */  
+   */
   public function addData(Data $data) {
     $this->data['data'][] = $data;
-  
+
     return $this;
   }
-  
+
   /**
    * Return the data array.
    *
    * @return array
-   */  
+   */
   public function getDataArray() {
     return $this->data['data'];
   }
@@ -270,9 +271,9 @@ abstract class Object {
   /**
    * Checks if data exists by a given name string.
    *
-   * @param  string  $name
+   * @param string $name
    *
-   * @return boolean       
+   * @return boolean
    */
   public function hasDataByName($name) {
     foreach ($this->getDataArray() as $data) {
@@ -287,7 +288,7 @@ abstract class Object {
   /**
    * Returns a data object by name
    *
-   * @param  string $name
+   * @param string $name
    *
    * @return AKlump\Http\CollectionJson\Data
    *   If the data doesn't exist an empty Data object will be returned for
@@ -306,10 +307,10 @@ abstract class Object {
   /**
    * Find item(s) based on data criteria.
    *
-   * @param  array $query
+   * @param array $query
    *   One or more name/value pairs to match on.  They will be combined
    *   with an AND join.  If you're looking for all items that have 'blond'
-   *   as the value of a data item with the name 'hair_color', then you 
+   *   as the value of a data item with the name 'hair_color', then you
    *   would pass: array('hair_color' => 'blond').
    *
    * @return array
@@ -334,7 +335,7 @@ abstract class Object {
   /**
    * Return the first matched item.
    *
-   * @param  array $query array
+   * @param array $query array
    *
    * @return Item
    *
@@ -343,7 +344,7 @@ abstract class Object {
   public function findFirstItem($query) {
     return ($i = $this->findItems($query)) ? reset($i) : NULL;
   }
-  
+
   /**
    * Returns a stdClass object of this class
    *
@@ -368,14 +369,15 @@ abstract class Object {
         return FALSE;
       }
     }
+
     return TRUE;
   }
 
   /**
    * Tries to return an object based on a JSON string.
    *
-   * @param  string $json
-   * @param  Object $obj  If the type of object is known, and you want only
+   * @param string $json
+   * @param Object $obj If the type of object is known, and you want only
    * to extract the data from the json and set it on $obj, then provide
    * $obj here.  Otherwise the object will be guessed by analyzing the JSON.
    *
@@ -383,7 +385,7 @@ abstract class Object {
    *
    * @see  Collection::setContent
    */
-  public static function import($json, Object $obj = NULL) {
+  public static function import($json, object $obj = NULL) {
     if (!($data = json_decode($json))) {
       throw new \InvalidArgumentException("Import source is not valid JSON.");
     }
@@ -395,7 +397,14 @@ abstract class Object {
     if ($obj instanceof Collection || self::checkKeys($data, 'collection')) {
       $understood = TRUE;
       $data = (array) $data['collection'];
-      $data += array('href' => '', 'items' => array(), 'links' => array(), 'queries' => array(), 'template' => '', 'version' => '1.0');
+      $data += array(
+        'href' => '',
+        'items' => array(),
+        'links' => array(),
+        'queries' => array(),
+        'template' => '',
+        'version' => '1.0',
+      );
 
       $obj = isset($obj) ? $obj : new Collection('');
       $obj->setHref($data['href']);
@@ -403,22 +412,22 @@ abstract class Object {
       $obj->setItems(array());
       foreach ($data['items'] as $value) {
         $value = json_encode($value);
-        $obj->addItem(Object::import($value, new Item(NULL)));
+        $obj->addItem(static::import($value, new Item(NULL)));
       }
 
       foreach ($data['links'] as $value) {
         $value = json_encode($value);
-        $obj->addLink(Object::import($value, new Link(NULL, NULL)));
+        $obj->addLink(static::import($value, new Link(NULL, NULL)));
       }
 
       foreach ($data['queries'] as $value) {
         $value = json_encode($value);
-        $obj->addQuery(Object::import($value, new Query(NULL, array())));
+        $obj->addQuery(static::import($value, new Query(NULL, array())));
       }
 
       if (!empty($data['template'])) {
         $value = json_encode(array('template' => $data['template']));
-        $obj->setTemplate($template = Object::import($value, new Template));  
+        $obj->setTemplate($template = static::import($value, new Template));
       }
 
       if (!empty($data['version'])) {
@@ -427,14 +436,14 @@ abstract class Object {
 
       if (!empty($data['error'])) {
         $value = json_encode($data['error']);
-        $obj->setError(Object::import($value, new Error(NULL)));
+        $obj->setError(static::import($value, new Error(NULL)));
       }
     }
 
     // A "Data" object.
     elseif ($obj instanceof Data || self::checkKeys($data, 'name', 'value')) {
       $understood = TRUE;
-      $data += array('name' => '', 'value' => '','prompt' => '');
+      $data += array('name' => '', 'value' => '', 'prompt' => '');
 
       $obj = isset($obj) ? $obj : new Data('', '');
       $obj->setName($data['name']);
@@ -445,13 +454,18 @@ abstract class Object {
     // A "Query" object
     elseif ($obj instanceof Query || self::checkKeys($data, 'data', 'href', 'prompt')) {
       $understood = TRUE;
-      $data += array('data' => array(), 'href' => '', 'prompt' => '', 'rel' => '');
-      $dataArray  = array();
+      $data += array(
+        'data' => array(),
+        'href' => '',
+        'prompt' => '',
+        'rel' => '',
+      );
+      $dataArray = array();
       foreach ($data['data'] as $value) {
-        $value       = json_encode($value);
-        $dataArray[] = Object::import($value);
+        $value = json_encode($value);
+        $dataArray[] = static::import($value);
       }
-      
+
       $obj = isset($obj) ? $obj : new Query('', array());
       $obj->setHref($data['href']);
       $obj->setDataArray($dataArray);
@@ -470,38 +484,38 @@ abstract class Object {
     elseif ($obj instanceof Item || self::checkKeys($data, 'data', 'href')) {
       $understood = TRUE;
       $data += array('links' => array());
-      $dataArray  = array();
+      $dataArray = array();
       $linksArray = array();
 
       $obj = isset($obj) ? $obj : new Item(NULL);
-      $obj->setHref($data['href']);      
+      $obj->setHref($data['href']);
 
       foreach ($data['data'] as $value) {
-        $value       = json_encode($value);
+        $value = json_encode($value);
 
         // We sent an empty Data object here so that we remove any chance
         // of misinterpretation of the json due to missing optional keys.
         // We do this because we have greater, contextual knowledge at this
         // point than when it tries to import just the JSON.
-        $obj->addData(Object::import($value, new Data(NULL, NULL)));
+        $obj->addData(static::import($value, new Data(NULL, NULL)));
       }
 
       foreach ($data['links'] as $value) {
-        $value       = json_encode($value);
-        $obj->addLink(Object::import($value, new Link(NULL, NULL)));
+        $value = json_encode($value);
+        $obj->addLink(static::import($value, new Link(NULL, NULL)));
       }
     }
 
     // A "Template" object
     elseif ($obj instanceof Template || self::checkKeys($data, 'template')) {
       $understood = TRUE;
-      $data       = (array) $data['template'];
+      $data = (array) $data['template'];
       $data += array('data' => array());
       $obj = isset($obj) ? $obj : new Template;
 
       foreach ($data['data'] as $value) {
-        $value       = json_encode($value);
-        $obj->addData(Object::import($value, new Data(NULL, NULL)));
+        $value = json_encode($value);
+        $obj->addData(static::import($value, new Data(NULL, NULL)));
       }
     }
 
@@ -514,7 +528,7 @@ abstract class Object {
       $obj->setCode($data['code']);
       $obj->setTitle($data['title']);
       $obj->setMessage($data['message']);
-    }    
+    }
 
     if (!$understood) {
       throw new \InvalidArgumentException("Unable to understand the import source.");

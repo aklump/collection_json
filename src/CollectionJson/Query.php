@@ -4,8 +4,8 @@ namespace AKlump\Http\CollectionJson;
 /**
  * Represents a query
  */
-class Query extends Object {
-  
+class Query extends CollectionBase {
+
   public function __construct($href, Array $dataArray, $rel = '', $prompt = '') {
     parent::__construct();
     $this->setHref($href);
@@ -14,10 +14,10 @@ class Query extends Object {
     $this->setPrompt($prompt);
   }
 
-  public function asStdClass() {
+  public function asStdClass(): \stdClass {
     $obj = (object) array(
-      'href' => $this->getHref(), 
-      'rel' => $this->getRel(), 
+      'href' => $this->getHref(),
+      'rel' => $this->getRel(),
     );
     if ($p = $this->getPrompt()) {
       $obj->prompt = $p;
@@ -25,7 +25,7 @@ class Query extends Object {
     foreach ($this->getDataArray() as $data) {
       $obj->data[] = $data->asStdClass();
     }
-    
+
     return $obj;
   }
 }
