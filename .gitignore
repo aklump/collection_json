@@ -1,10 +1,3 @@
-lib/loft_php_lib/*
-!lib/loft_php_lib/dist
-lib/loft_php_lib/dist/src/AKlump/LoftLib/*
-!lib/loft_php_lib/dist/src/AKlump/LoftLib/Code
-!lib/loft_php_lib/dist/src/AKlump/LoftLib/Xml
-lib/loft_php_lib/dist/src/AKlump/LoftLib/Code/*
-!lib/loft_php_lib/dist/src/AKlump/LoftLib/Code/String.php
-!lib/loft_php_lib/dist/src/AKlump/LoftLib/Code/Grammar.php
-lib/loft_php_lib/dist/src/AKlump/LoftLib/Xml/*
-!lib/loft_php_lib/dist/src/AKlump/LoftLib/Xml/LoftXmlElement.php
+.idea/
+composer.lock
+vendor/

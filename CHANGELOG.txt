@@ -1,7 +1,0 @@
-## Version: 0.8
-* Corrected misspelling in the name of the Interface from ContentTypeTranslaterInterface to ContentTypeTranslatorInterface.  You will need to update any references to this interface name.
-
-## Version: 0.5
-* The order of arguments to the _Link_ object has changed, please update your scripts to reflect the new order which is.
-
-        __construct($href, $rel, $name = '', $render = 'link', $prompt = '')
