@@ -1,7 +1,7 @@
 {
     "name": "aklump\/collection_json",
     "type": "library",
-    "version": "0.9.0",
+    "version": "0.9.1",
     "description": "Php objects for working with hypermedia Collection+JSON (http:\/\/amundsen.com\/media-types\/)",
     "keywords": [
         "vnd.collection",
