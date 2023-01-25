@@ -1,8 +1,14 @@
 {
   "name": "aklump/collection_json",
   "type": "library",
+  "version": "0.8.5",
   "description": "Php objects for working with hypermedia Collection+JSON (http://amundsen.com/media-types/)",
-  "keywords": ["vnd.collection", "json", "amundsen", "hypermedia"],
+  "keywords": [
+    "vnd.collection",
+    "json",
+    "amundsen",
+    "hypermedia"
+  ],
   "homepage": "http://www.intheloftstudios.com/packages/php/collection_json",
   "license": "BSD-3-Clause",
   "authors": [
@@ -17,9 +23,16 @@
     "php": ">=5.3.0",
     "spatie/array-to-xml": "^2.0"
   },
-
   "autoload": {
-    "psr-0": {"AKlump\\": "src/"},
-    "files": ["lib/loft_php_lib/dist/vendor/autoload.php"]
+    "psr-0": {
+      "AKlump\\": "src/"
+    },
+    "psr-4": {
+      "AKlump\\Http\\": "src",
+      "AKlump\\LoftLib\\Code\\": "src/LoftLib"
+    },
+    "files": [
+      "lib/loft_php_lib/dist/vendor/autoload.php"
+    ]
   }
 }
